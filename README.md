@@ -1,19 +1,42 @@
-Indicator 1 – Supplier Engagement Coverage
+Indicator 3 – Supplier Acknowledgment Rate
 Purpose
-Confirm that each supplier can be reached and has a clear ExxonMobil Relationship Owner responsible for the relationship.
+Confirm that the supplier has acknowledged the change, the correct supplier contact has been identified, and the supplier has engaged with the readiness process.
 Proposed logic
-A supplier will be counted as covered only when both conditions are met:
-Communication sent successfully – using Comms Progress = Initial Comms Sent as the reachability proxy.
-RO assigned – a Relationship Owner is populated for the supplier.
+A supplier would be counted as acknowledged when there is valid evidence of acknowledgment through one of the approved routes referenced in the readiness framework, such as:
+Email confirmation
+Verbal confirmation during a call / F2F discussion
+Webinar attendance
+Initial supplier conversation completed
+The framework also indicates that the appropriate supplier/function contact should be confirmed.
 KPI logic
-Comms Sent + RO Assigned = Supplier Engagement Coverage
-This is an AND condition, not an average of the two components.
+Valid supplier acknowledgment + correct contact confirmed = Supplier Acknowledgment
+The exact evidence routes and source field(s) still need to be confirmed with Robbie and Sonya.
 Why this works
-It aligns with the readiness framework definition of having a validated deliverable email and an internal Relationship Owner, while using data already available in the dashboard.
+It aligns with the readiness framework, which distinguishes simple reachability from actual supplier engagement. Indicator 1 confirms that the supplier can be reached; Indicator 3 confirms that the supplier has actively acknowledged the change and entered the readiness process.
 Target
-For High Priority suppliers: 100% by Aug 31.
+For High Priority suppliers:
+95% by Sep 30
+100% by Oct 15
 Landing page view
-The landing page will show only the high-level indicator:
+The landing page would show:
+Actual %
+Target %
+Current target date
+More Details button
+More Details vision
+Clicking More Details could show:
+Suppliers acknowledged by email
+Suppliers acknowledged verbally / through meetings
+Suppliers who attended the webinar
+Suppliers still pending acknowledgment
+Supplier/function contact confirmation status
+Supplier-level list for follow-up
+This would help explain both the acknowledgment gap and the route through which acknowledgment was received.
+Questions to confirm with Robbie and Sonya
+What should count as valid supplier acknowledgment — email, verbal confirmation, webinar attendance, or any one of these?
+Do we also require the correct supplier/function contact to be confirmed before the supplier counts as acknowledged?
+If a supplier is already SAP BN onboarded, should that count toward acknowledgment, or should SAP BN onboarding remain separate under system readiness?
+Which field / tracker should be treated as the source of truth for acknowledgment status?The landing page will show only the high-level indicator:
 Actual %
 Target %
 Target date

@@ -1,26 +1,41 @@
-Selected Primary Sector =
+Selected City =
 COALESCE(
-    SELECTEDVALUE('Employee Roster'[Primary Sector Name]),
+    SELECTEDVALUE('Employee Roster'[City]),
     "--"
 )
 
-Selected Secondary Sector =
+Selected Geographic Region =
 COALESCE(
-    SELECTEDVALUE('Employee Roster'[Secondary Sector Name]),
+    SELECTEDVALUE('Employee Roster'[Geographic Region]),
     "--"
 )
 
-Selected OCG Sector Team =
+Selected Preferred Name =
 COALESCE(
-    SELECTEDVALUE('Employee Roster'[Include in OCG Sector Team?]),
+    SELECTEDVALUE('Employee Roster'[Preferred Name]),
     "--"
 )
 
-
-Employee Selected =
-IF(
-    HASONEVALUE('Employee Roster'[Full Name]),
-    1,
-    0
+Selected GPN =
+COALESCE(
+    SELECTEDVALUE('Employee Roster'[GPN]),
+    "--"
 )
 
+Selected GUI =
+COALESCE(
+    SELECTEDVALUE('Employee Roster'[GUI]),
+    "--"
+)
+
+Selected Current Project =
+COALESCE(
+    SELECTEDVALUE('Employee Roster'[Current Project]),
+    "--"
+)
+
+Selected Core Skills =
+COALESCE(
+    SELECTEDVALUE('Employee Roster'[Core Skills]),
+    "--"
+)

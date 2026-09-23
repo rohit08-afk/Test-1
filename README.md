@@ -1,62 +1,26 @@
-Selected Employee Name =
-SELECTEDVALUE(
-    'Employee Roster'[Full Name],
-    "--"
-)
-
-Selected Rank =
+Selected Primary Sector =
 COALESCE(
-    SELECTEDVALUE('Employee Roster'[Rank Desc]),
+    SELECTEDVALUE('Employee Roster'[Primary Sector Name]),
     "--"
 )
 
-Selected EY Grade =
+Selected Secondary Sector =
 COALESCE(
-    SELECTEDVALUE('Employee Roster'[Experience Level / EY Grade]),
+    SELECTEDVALUE('Employee Roster'[Secondary Sector Name]),
     "--"
 )
 
-Selected Email =
+Selected OCG Sector Team =
 COALESCE(
-    SELECTEDVALUE('Employee Roster'[Email Address]),
+    SELECTEDVALUE('Employee Roster'[Include in OCG Sector Team?]),
     "--"
 )
 
-Selected Hire Date =
-VAR d =
-    SELECTEDVALUE('Employee Roster'[Current Employment Date])
-RETURN
-    IF(
-        ISBLANK(d),
-        "--",
-        FORMAT(d, "dd MMM yyyy")
-    )
 
-    Selected Tenure =
-VAR t =
-    SELECTEDVALUE('Employee Roster'[Tenure Years])
-RETURN
-    IF(
-        ISBLANK(t),
-        "--",
-        FORMAT(t, "0.0") & " years"
-    )
-
-
-    Selected Counselor =
-COALESCE(
-    SELECTEDVALUE('Employee Roster'[Counselor Name]),
-    "--"
+Employee Selected =
+IF(
+    HASONEVALUE('Employee Roster'[Full Name]),
+    1,
+    0
 )
 
-Selected Counselor Connect Leader =
-COALESCE(
-    SELECTEDVALUE('Employee Roster'[Counselor Connect Leader Name]),
-    "--"
-)
-
-Selected Counselee Count =
-VAR x =
-    SELECTEDVALUE('Employee Roster'[Counselee Count])
-RETURN
-    COALESCE(x, 0)

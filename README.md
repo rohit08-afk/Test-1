@@ -1,60 +1,33 @@
-Supplier Lookup Gap Items =
-DATATABLE(
-    "Gap ID", INTEGER,
-    "Gap Area", STRING,
-    {
-        {1,  "Supplier Name Missing"},
-        {2,  "Supplier Number Missing"},
-        {3,  "Country Missing"},
-        {4,  "Agreement Number Missing"},
-        {5,  "External Party Type Missing"},
-        {6,  "Procurement / Non-Procurement Missing"},
-        {7,  "Comms Progress Missing"},
-        {8,  "Relationship Owner Missing"},
-        {9,  "Relationship Owner Not Verified"},
-        {10, "Persona Missing"},
-        {11, "Persona Not Verified"},
-        {12, "Category Family Missing"},
-        {13, "Sub-Category Missing"},
-        {14, "Category / Sub-Category Not Verified"},
-        {15, "BRT Validator Missing"},
-        {16, "BRT Not Validated"},
-        {17, "SAP BN Status Missing"}
-    }
-)
-
-
-
 GL1 Lookup - Gap Flag =
 VAR GapID =
     SELECTEDVALUE('Supplier Lookup Gap Items'[Gap ID])
 
 VAR SupplierName =
-    SELECTEDVALUE('Supplier Integration Register'[Supplier Name])
+    SELECTEDVALUE('Supplier Integration Register'[Name])
 
 VAR SupplierNumber =
-    SELECTEDVALUE('Supplier Integration Register'[SAP Vendor Key])
+    SELECTEDVALUE('Supplier Integration Register'[SAP Vendor Key.1])
 
 VAR Country =
-    SELECTEDVALUE('Supplier Integration Register'[Country])
+    SELECTEDVALUE('Supplier SAP BN Mapping'[Supplier Country])
 
 VAR AgreementNumber =
     SELECTEDVALUE('Supplier Integration Register'[Agreement Number])
 
 VAR ExternalPartyType =
-    SELECTEDVALUE('Supplier Integration Register'[External Party Type])
+    SELECTEDVALUE('Supplier Integration Register'[EP Type - New])
 
 VAR Procurement =
-    SELECTEDVALUE('Supplier Integration Register'[Procurement or Non-Procurement])
+    SELECTEDVALUE('Supplier Integration Register'[Procurement or Non Procurement])
 
 VAR CommsProgress =
     SELECTEDVALUE('Supplier Integration Register'[Comms Progress])
 
 VAR RO =
-    SELECTEDVALUE('Supplier Integration Register'[Relationship Owner])
+    SELECTEDVALUE('Supplier Integration Register'[ExxonMobil Relationship Owner (RO)])
 
 VAR ROVerified =
-    SELECTEDVALUE('Supplier Integration Register'[Relationship Owner Verified])
+    SELECTEDVALUE('Supplier Integration Register'[RO Verified])
 
 VAR Persona =
     SELECTEDVALUE('Supplier Integration Register'[Persona])
@@ -66,10 +39,10 @@ VAR CategoryFamily =
     SELECTEDVALUE('Supplier Integration Register'[Category Family])
 
 VAR SubCategory =
-    SELECTEDVALUE('Supplier Integration Register'[Sub Category])
+    SELECTEDVALUE('Supplier Integration Register'[Sub-Category])
 
 VAR CategoryVerified =
-    SELECTEDVALUE('Supplier Integration Register'[Cat & Sub Cat Verified])
+    SELECTEDVALUE('Supplier Integration Register'[Category & Sub-Category Verified?])
 
 VAR BRT =
     SELECTEDVALUE('Supplier Integration Register'[BRT Validator])
@@ -80,58 +53,105 @@ VAR BRTValidated =
 VAR SAPBN =
     SELECTEDVALUE('Supplier Integration Register'[SAP BN Status])
 
+
 VAR SupplierNameMissing =
-    ISBLANK(SupplierName) || TRIM(SupplierName) = "" || SupplierName = "--"
+    ISBLANK(SupplierName)
+        || TRIM(SupplierName) = ""
+        || SupplierName = "--"
+        || SupplierName = "-"
 
 VAR SupplierNumberMissing =
-    ISBLANK(SupplierNumber) || TRIM(SupplierNumber) = "" || SupplierNumber = "--"
+    ISBLANK(SupplierNumber)
+        || TRIM(SupplierNumber) = ""
+        || SupplierNumber = "--"
+        || SupplierNumber = "-"
 
 VAR CountryMissing =
-    ISBLANK(Country) || TRIM(Country) = "" || Country = "--"
+    ISBLANK(Country)
+        || TRIM(Country) = ""
+        || Country = "--"
+        || Country = "-"
 
 VAR AgreementMissing =
-    ISBLANK(AgreementNumber) || TRIM(AgreementNumber) = "" || AgreementNumber = "--"
+    ISBLANK(AgreementNumber)
+        || TRIM(AgreementNumber) = ""
+        || AgreementNumber = "--"
+        || AgreementNumber = "-"
 
 VAR ExternalPartyMissing =
-    ISBLANK(ExternalPartyType) || TRIM(ExternalPartyType) = "" || ExternalPartyType = "--"
+    ISBLANK(ExternalPartyType)
+        || TRIM(ExternalPartyType) = ""
+        || ExternalPartyType = "--"
+        || ExternalPartyType = "-"
 
 VAR ProcurementMissing =
-    ISBLANK(Procurement) || TRIM(Procurement) = "" || Procurement = "--"
+    ISBLANK(Procurement)
+        || TRIM(Procurement) = ""
+        || Procurement = "--"
+        || Procurement = "-"
 
 VAR CommsMissing =
-    ISBLANK(CommsProgress) || TRIM(CommsProgress) = "" || CommsProgress = "--"
+    ISBLANK(CommsProgress)
+        || TRIM(CommsProgress) = ""
+        || CommsProgress = "--"
+        || CommsProgress = "-"
 
 VAR ROMissing =
-    ISBLANK(RO) || TRIM(RO) = "" || RO = "--"
+    ISBLANK(RO)
+        || TRIM(RO) = ""
+        || RO = "--"
+        || RO = "-"
 
 VAR PersonaMissing =
-    ISBLANK(Persona) || TRIM(Persona) = "" || Persona = "--"
+    ISBLANK(Persona)
+        || TRIM(Persona) = ""
+        || Persona = "--"
+        || Persona = "-"
 
 VAR CategoryMissing =
-    ISBLANK(CategoryFamily) || TRIM(CategoryFamily) = "" || CategoryFamily = "--"
+    ISBLANK(CategoryFamily)
+        || TRIM(CategoryFamily) = ""
+        || CategoryFamily = "--"
+        || CategoryFamily = "-"
 
 VAR SubCategoryMissing =
-    ISBLANK(SubCategory) || TRIM(SubCategory) = "" || SubCategory = "--"
+    ISBLANK(SubCategory)
+        || TRIM(SubCategory) = ""
+        || SubCategory = "--"
+        || SubCategory = "-"
 
 VAR BRTMissing =
-    ISBLANK(BRT) || TRIM(BRT) = "" || BRT = "--"
+    ISBLANK(BRT)
+        || TRIM(BRT) = ""
+        || BRT = "--"
+        || BRT = "-"
 
 VAR SAPBNMissing =
-    ISBLANK(SAPBN) || TRIM(SAPBN) = "" || SAPBN = "--"
+    ISBLANK(SAPBN)
+        || TRIM(SAPBN) = ""
+        || SAPBN = "--"
+        || SAPBN = "-"
+
 
 RETURN
 SWITCH(
     GapID,
 
-    1,  IF(SupplierNameMissing, 1, 0),
-    2,  IF(SupplierNumberMissing, 1, 0),
-    3,  IF(CountryMissing, 1, 0),
-    4,  IF(AgreementMissing, 1, 0),
-    5,  IF(ExternalPartyMissing, 1, 0),
-    6,  IF(ProcurementMissing, 1, 0),
-    7,  IF(CommsMissing, 1, 0),
+    1, IF(SupplierNameMissing, 1, 0),
 
-    8,  IF(ROMissing, 1, 0),
+    2, IF(SupplierNumberMissing, 1, 0),
+
+    3, IF(CountryMissing, 1, 0),
+
+    4, IF(AgreementMissing, 1, 0),
+
+    5, IF(ExternalPartyMissing, 1, 0),
+
+    6, IF(ProcurementMissing, 1, 0),
+
+    7, IF(CommsMissing, 1, 0),
+
+    8, IF(ROMissing, 1, 0),
 
     9,
         IF(

@@ -1,60 +1,44 @@
-GL1 Lookup - Gap Areas =
+GL2 Lookup - Gap Areas =
 
 VAR SupplierName =
-    [Selected Supplier Name Display]
+    [GL2 Lookup - Supplier Name]
 
 VAR SupplierNumber =
-    [Selected Supplier Number]
+    [GL2 Lookup - Supplier Number]
 
 VAR Country =
-    [Selected Country]
+    [GL2 Lookup - Country]
 
 VAR Agreement =
-    [Selected Agreement Number]
+    [GL2 Lookup - Agreement Number]
 
 VAR EPType =
-    [Selected EP Type]
+    [GL2 Lookup - External Party Type]
 
 VAR Procurement =
-    [Selected Procurement Non Procurement]
+    [GL2 Lookup - Procurement]
 
 VAR CommsProgress =
-    [Selected Comms Progress]
+    [GL2 Lookup - Comms Progress]
 
 VAR RO =
-    [Selected RO]
-
-VAR ROVerified =
-    [Selected RO Verified]
+    [GL2 Lookup - Relationship Owner]
 
 VAR Persona =
-    [Selected Persona]
-
-VAR PersonaVerified =
-    [Selected Persona Verified]
+    [GL2 Lookup - Persona]
 
 VAR Category =
-    [Selected Category Family]
+    [GL2 Lookup - Category Family]
 
 VAR SubCategory =
-    [Selected Sub-Category]
-
-VAR CatSubCatVerified =
-    [Selected Cat & Sub-Cat Verified]
+    [GL2 Lookup - Sub-Category]
 
 VAR BRT =
-    [Selected BRT Validator]
-
-VAR BRTValidated =
-    [Selected BRT Validation]
+    [GL2 Lookup - BRT Validator]
 
 VAR SAPBN =
-    [Selected SAP BN Status]
+    [GL2 Lookup - SAP BN Status]
 
-
--- ==========================
--- MISSING VALUE CHECKS
--- ==========================
 
 VAR SupplierNameMissing =
     ISBLANK(SupplierName)
@@ -135,10 +119,6 @@ VAR SAPBNMissing =
         || TRIM(SAPBN) = "--"
 
 
--- ==========================
--- GAP TEXT
--- ==========================
-
 VAR GapSupplierName =
     IF(
         SupplierNameMissing,
@@ -192,22 +172,14 @@ VAR GapRO =
     IF(
         ROMissing,
         "• Relationship Owner Missing" & UNICHAR(10),
-        IF(
-            UPPER(TRIM(COALESCE(ROVerified, ""))) <> "YES",
-            "• Relationship Owner Not Verified" & UNICHAR(10),
-            ""
-        )
+        "• Relationship Owner Not Verified" & UNICHAR(10)
     )
 
 VAR GapPersona =
     IF(
         PersonaMissing,
         "• Persona Missing" & UNICHAR(10),
-        IF(
-            UPPER(TRIM(COALESCE(PersonaVerified, ""))) <> "YES",
-            "• Persona Not Verified" & UNICHAR(10),
-            ""
-        )
+        "• Persona Not Verified" & UNICHAR(10)
     )
 
 VAR GapCategory =
@@ -227,8 +199,7 @@ VAR GapSubCategory =
 VAR GapCatVerification =
     IF(
         NOT CategoryMissing
-            && NOT SubCategoryMissing
-            && UPPER(TRIM(COALESCE(CatSubCatVerified, ""))) <> "YES",
+            && NOT SubCategoryMissing,
         "• Category / Sub-Category Not Verified" & UNICHAR(10),
         ""
     )
@@ -237,11 +208,7 @@ VAR GapBRT =
     IF(
         BRTMissing,
         "• BRT Validator Missing" & UNICHAR(10),
-        IF(
-            UPPER(TRIM(COALESCE(BRTValidated, ""))) <> "YES",
-            "• BRT Not Validated" & UNICHAR(10),
-            ""
-        )
+        "• BRT Not Validated" & UNICHAR(10)
     )
 
 VAR GapSAPBN =

@@ -13,13 +13,10 @@ VAR Agreement =
     [GL2 Lookup - Agreement Number]
 
 VAR EPType =
-    [GL2 Lookup - External Party Type]
+    [GL2 Lookup - EP Type]
 
 VAR Procurement =
-    [GL2 Lookup - Procurement]
-
-VAR CommsProgress =
-    [GL2 Lookup - Comms Progress]
+    [GL2 Lookup - Proc Non-Proc]
 
 VAR RO =
     [GL2 Lookup - Relationship Owner]
@@ -28,17 +25,18 @@ VAR Persona =
     [GL2 Lookup - Persona]
 
 VAR Category =
-    [GL2 Lookup - Category Family]
+    [GL2 Lookup - Category]
 
-VAR SubCategory =
-    [GL2 Lookup - Sub-Category]
+VAR CategoryManager =
+    [GL2 Lookup - Category Manager]
 
 VAR BRT =
     [GL2 Lookup - BRT Validator]
 
-VAR SAPBN =
-    [GL2 Lookup - SAP BN Status]
 
+-- =====================================================
+-- MISSING CHECKS
+-- =====================================================
 
 VAR SupplierNameMissing =
     ISBLANK(SupplierName)
@@ -76,12 +74,6 @@ VAR ProcurementMissing =
         || TRIM(Procurement) = "-"
         || TRIM(Procurement) = "--"
 
-VAR CommsMissing =
-    ISBLANK(CommsProgress)
-        || TRIM(CommsProgress) = ""
-        || TRIM(CommsProgress) = "-"
-        || TRIM(CommsProgress) = "--"
-
 VAR ROMissing =
     ISBLANK(RO)
         || TRIM(RO) = ""
@@ -100,11 +92,11 @@ VAR CategoryMissing =
         || TRIM(Category) = "-"
         || TRIM(Category) = "--"
 
-VAR SubCategoryMissing =
-    ISBLANK(SubCategory)
-        || TRIM(SubCategory) = ""
-        || TRIM(SubCategory) = "-"
-        || TRIM(SubCategory) = "--"
+VAR CategoryManagerMissing =
+    ISBLANK(CategoryManager)
+        || TRIM(CategoryManager) = ""
+        || TRIM(CategoryManager) = "-"
+        || TRIM(CategoryManager) = "--"
 
 VAR BRTMissing =
     ISBLANK(BRT)
@@ -112,12 +104,10 @@ VAR BRTMissing =
         || TRIM(BRT) = "-"
         || TRIM(BRT) = "--"
 
-VAR SAPBNMissing =
-    ISBLANK(SAPBN)
-        || TRIM(SAPBN) = ""
-        || TRIM(SAPBN) = "-"
-        || TRIM(SAPBN) = "--"
 
+-- =====================================================
+-- GAP OUTPUT
+-- =====================================================
 
 VAR GapSupplierName =
     IF(
@@ -161,13 +151,6 @@ VAR GapProcurement =
         ""
     )
 
-VAR GapComms =
-    IF(
-        CommsMissing,
-        "• Comms Progress Missing" & UNICHAR(10),
-        ""
-    )
-
 VAR GapRO =
     IF(
         ROMissing,
@@ -185,22 +168,14 @@ VAR GapPersona =
 VAR GapCategory =
     IF(
         CategoryMissing,
-        "• Category Family Missing" & UNICHAR(10),
-        ""
+        "• Category Missing" & UNICHAR(10),
+        "• Category Not Verified" & UNICHAR(10)
     )
 
-VAR GapSubCategory =
+VAR GapCategoryManager =
     IF(
-        SubCategoryMissing,
-        "• Sub-Category Missing" & UNICHAR(10),
-        ""
-    )
-
-VAR GapCatVerification =
-    IF(
-        NOT CategoryMissing
-            && NOT SubCategoryMissing,
-        "• Category / Sub-Category Not Verified" & UNICHAR(10),
+        CategoryManagerMissing,
+        "• Category Manager Missing" & UNICHAR(10),
         ""
     )
 
@@ -211,13 +186,6 @@ VAR GapBRT =
         "• BRT Not Validated" & UNICHAR(10)
     )
 
-VAR GapSAPBN =
-    IF(
-        SAPBNMissing,
-        "• SAP BN Status Missing" & UNICHAR(10),
-        ""
-    )
-
 
 VAR Result =
       GapSupplierName
@@ -226,14 +194,11 @@ VAR Result =
     & GapAgreement
     & GapEPType
     & GapProcurement
-    & GapComms
     & GapRO
     & GapPersona
     & GapCategory
-    & GapSubCategory
-    & GapCatVerification
+    & GapCategoryManager
     & GapBRT
-    & GapSAPBN
 
 
 RETURN

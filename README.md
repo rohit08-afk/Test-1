@@ -1,395 +1,221 @@
-GL1 Lookup - Gap Flag =
+GL1 Lookup - Gap Areas =
 
-VAR GapID =
-    SELECTEDVALUE(
-        'Supplier Lookup Gap Items'[Gap ID]
+VAR SupplierName =
+    [Selected Supplier Name Display]
+
+VAR Agreement =
+    [Selected Agreement Number]
+
+VAR EPType =
+    [Selected EP Type]
+
+VAR Procurement =
+    [Selected Procurement Non Procurement]
+
+VAR CommsProgress =
+    [Selected Comms Progress]
+
+VAR RO =
+    [Selected RO]
+
+VAR ROVerified =
+    [Selected RO Verified]
+
+VAR Persona =
+    [Selected Persona]
+
+VAR PersonaVerified =
+    [Selected Persona Verified]
+
+VAR Category =
+    [Selected Category Family]
+
+VAR SubCategory =
+    [Selected Sub-Category]
+
+VAR CatSubCatVerified =
+    [Selected Cat & Sub-Cat Verified]
+
+VAR BRT =
+    [Selected BRT Validator]
+
+VAR BRTValidated =
+    [Selected BRT Validation]
+
+
+-- Missing checks
+
+VAR SupplierNameMissing =
+    ISBLANK(SupplierName)
+        || TRIM(SupplierName) = ""
+        || TRIM(SupplierName) = "-"
+        || TRIM(SupplierName) = "--"
+
+VAR AgreementMissing =
+    ISBLANK(Agreement)
+        || TRIM(Agreement) = ""
+        || TRIM(Agreement) = "-"
+        || TRIM(Agreement) = "--"
+
+VAR EPTypeMissing =
+    ISBLANK(EPType)
+        || TRIM(EPType) = ""
+        || TRIM(EPType) = "-"
+        || TRIM(EPType) = "--"
+
+VAR ProcurementMissing =
+    ISBLANK(Procurement)
+        || TRIM(Procurement) = ""
+        || TRIM(Procurement) = "-"
+        || TRIM(Procurement) = "--"
+
+VAR CommsMissing =
+    ISBLANK(CommsProgress)
+        || TRIM(CommsProgress) = ""
+        || TRIM(CommsProgress) = "-"
+        || TRIM(CommsProgress) = "--"
+
+VAR ROMissing =
+    ISBLANK(RO)
+        || TRIM(RO) = ""
+        || TRIM(RO) = "-"
+        || TRIM(RO) = "--"
+
+VAR PersonaMissing =
+    ISBLANK(Persona)
+        || TRIM(Persona) = ""
+        || TRIM(Persona) = "-"
+        || TRIM(Persona) = "--"
+
+VAR CategoryMissing =
+    ISBLANK(Category)
+        || TRIM(Category) = ""
+        || TRIM(Category) = "-"
+        || TRIM(Category) = "--"
+
+VAR SubCategoryMissing =
+    ISBLANK(SubCategory)
+        || TRIM(SubCategory) = ""
+        || TRIM(SubCategory) = "-"
+        || TRIM(SubCategory) = "--"
+
+VAR BRTMissing =
+    ISBLANK(BRT)
+        || TRIM(BRT) = ""
+        || TRIM(BRT) = "-"
+        || TRIM(BRT) = "--"
+
+
+-- Individual gap lines
+
+VAR GapSupplierName =
+    IF(
+        SupplierNameMissing,
+        "• Supplier Name Missing" & UNICHAR(10),
+        ""
     )
 
--- =====================================================
--- CORE FIELD PRESENCE CHECKS
--- =====================================================
+VAR GapAgreement =
+    IF(
+        AgreementMissing,
+        "• Agreement Number Missing" & UNICHAR(10),
+        ""
+    )
 
-VAR SupplierNamePresent =
-    CALCULATE(
-        COUNTROWS('Supplier Integration Register'),
-        FILTER(
-            'Supplier Integration Register',
-            NOT ISBLANK('Supplier Integration Register'[Name])
-                && TRIM('Supplier Integration Register'[Name]) <> ""
-                && TRIM('Supplier Integration Register'[Name]) <> "-"
-                && TRIM('Supplier Integration Register'[Name]) <> "--"
+VAR GapEPType =
+    IF(
+        EPTypeMissing,
+        "• External Party Type Missing" & UNICHAR(10),
+        ""
+    )
+
+VAR GapProcurement =
+    IF(
+        ProcurementMissing,
+        "• Procurement / Non-Procurement Missing" & UNICHAR(10),
+        ""
+    )
+
+VAR GapComms =
+    IF(
+        CommsMissing,
+        "• Comms Progress Missing" & UNICHAR(10),
+        ""
+    )
+
+VAR GapRO =
+    IF(
+        ROMissing,
+        "• Relationship Owner Missing" & UNICHAR(10),
+        IF(
+            UPPER(TRIM(COALESCE(ROVerified, ""))) <> "YES",
+            "• Relationship Owner Not Verified" & UNICHAR(10),
+            ""
         )
-    ) > 0
+    )
 
-
-VAR SupplierNumberPresent =
-    CALCULATE(
-        COUNTROWS('Supplier Integration Register'),
-        FILTER(
-            'Supplier Integration Register',
-            NOT ISBLANK('Supplier Integration Register'[SAP Vendor Key.1])
-                && TRIM('Supplier Integration Register'[SAP Vendor Key.1]) <> ""
-                && TRIM('Supplier Integration Register'[SAP Vendor Key.1]) <> "-"
-                && TRIM('Supplier Integration Register'[SAP Vendor Key.1]) <> "--"
+VAR GapPersona =
+    IF(
+        PersonaMissing,
+        "• Persona Missing" & UNICHAR(10),
+        IF(
+            UPPER(TRIM(COALESCE(PersonaVerified, ""))) <> "YES",
+            "• Persona Not Verified" & UNICHAR(10),
+            ""
         )
-    ) > 0
+    )
 
+VAR GapCategory =
+    IF(
+        CategoryMissing,
+        "• Category Family Missing" & UNICHAR(10),
+        ""
+    )
 
-VAR CountryPresent =
-    CALCULATE(
-        COUNTROWS('Supplier SAP BN Mapping'),
-        FILTER(
-            'Supplier SAP BN Mapping',
-            NOT ISBLANK('Supplier SAP BN Mapping'[Supplier Country])
-                && TRIM('Supplier SAP BN Mapping'[Supplier Country]) <> ""
-                && TRIM('Supplier SAP BN Mapping'[Supplier Country]) <> "-"
-                && TRIM('Supplier SAP BN Mapping'[Supplier Country]) <> "--"
+VAR GapSubCategory =
+    IF(
+        SubCategoryMissing,
+        "• Sub-Category Missing" & UNICHAR(10),
+        ""
+    )
+
+VAR GapCatVerification =
+    IF(
+        NOT CategoryMissing
+            && NOT SubCategoryMissing
+            && UPPER(TRIM(COALESCE(CatSubCatVerified, ""))) <> "YES",
+        "• Category / Sub-Category Not Verified" & UNICHAR(10),
+        ""
+    )
+
+VAR GapBRT =
+    IF(
+        BRTMissing,
+        "• BRT Validator Missing" & UNICHAR(10),
+        IF(
+            UPPER(TRIM(COALESCE(BRTValidated, ""))) <> "YES",
+            "• BRT Not Validated" & UNICHAR(10),
+            ""
         )
-    ) > 0
+    )
 
 
-VAR AgreementPresent =
-    CALCULATE(
-        COUNTROWS('Supplier Integration Register'),
-        FILTER(
-            'Supplier Integration Register',
-            NOT ISBLANK('Supplier Integration Register'[Agreement Number])
-                && TRIM('Supplier Integration Register'[Agreement Number]) <> ""
-                && TRIM('Supplier Integration Register'[Agreement Number]) <> "-"
-                && TRIM('Supplier Integration Register'[Agreement Number]) <> "--"
-        )
-    ) > 0
-
-
-VAR ExternalPartyTypePresent =
-    CALCULATE(
-        COUNTROWS('Supplier Integration Register'),
-        FILTER(
-            'Supplier Integration Register',
-            NOT ISBLANK('Supplier Integration Register'[EP Type - New])
-                && TRIM('Supplier Integration Register'[EP Type - New]) <> ""
-                && TRIM('Supplier Integration Register'[EP Type - New]) <> "-"
-                && TRIM('Supplier Integration Register'[EP Type - New]) <> "--"
-        )
-    ) > 0
-
-
-VAR ProcurementPresent =
-    CALCULATE(
-        COUNTROWS('Supplier Integration Register'),
-        FILTER(
-            'Supplier Integration Register',
-            NOT ISBLANK('Supplier Integration Register'[Procurement or Non Procurement])
-                && TRIM('Supplier Integration Register'[Procurement or Non Procurement]) <> ""
-                && TRIM('Supplier Integration Register'[Procurement or Non Procurement]) <> "-"
-                && TRIM('Supplier Integration Register'[Procurement or Non Procurement]) <> "--"
-        )
-    ) > 0
-
-
-VAR CommsProgressPresent =
-    CALCULATE(
-        COUNTROWS('Supplier Integration Register'),
-        FILTER(
-            'Supplier Integration Register',
-            NOT ISBLANK('Supplier Integration Register'[Comms Progress])
-                && TRIM('Supplier Integration Register'[Comms Progress]) <> ""
-                && TRIM('Supplier Integration Register'[Comms Progress]) <> "-"
-                && TRIM('Supplier Integration Register'[Comms Progress]) <> "--"
-        )
-    ) > 0
-
-
-VAR ROPresent =
-    CALCULATE(
-        COUNTROWS('Supplier Integration Register'),
-        FILTER(
-            'Supplier Integration Register',
-            NOT ISBLANK(
-                'Supplier Integration Register'[ExxonMobil Relationship Owner (RO)]
-            )
-                && TRIM(
-                    'Supplier Integration Register'[ExxonMobil Relationship Owner (RO)]
-                ) <> ""
-                && TRIM(
-                    'Supplier Integration Register'[ExxonMobil Relationship Owner (RO)]
-                ) <> "-"
-                && TRIM(
-                    'Supplier Integration Register'[ExxonMobil Relationship Owner (RO)]
-                ) <> "--"
-        )
-    ) > 0
-
-
-VAR PersonaPresent =
-    CALCULATE(
-        COUNTROWS('Supplier Integration Register'),
-        FILTER(
-            'Supplier Integration Register',
-            NOT ISBLANK('Supplier Integration Register'[Persona])
-                && TRIM('Supplier Integration Register'[Persona]) <> ""
-                && TRIM('Supplier Integration Register'[Persona]) <> "-"
-                && TRIM('Supplier Integration Register'[Persona]) <> "--"
-        )
-    ) > 0
-
-
-VAR CategoryPresent =
-    CALCULATE(
-        COUNTROWS('Supplier Integration Register'),
-        FILTER(
-            'Supplier Integration Register',
-            NOT ISBLANK('Supplier Integration Register'[Category Family])
-                && TRIM('Supplier Integration Register'[Category Family]) <> ""
-                && TRIM('Supplier Integration Register'[Category Family]) <> "-"
-                && TRIM('Supplier Integration Register'[Category Family]) <> "--"
-        )
-    ) > 0
-
-
-VAR SubCategoryPresent =
-    CALCULATE(
-        COUNTROWS('Supplier Integration Register'),
-        FILTER(
-            'Supplier Integration Register',
-            NOT ISBLANK('Supplier Integration Register'[Sub-Category])
-                && TRIM('Supplier Integration Register'[Sub-Category]) <> ""
-                && TRIM('Supplier Integration Register'[Sub-Category]) <> "-"
-                && TRIM('Supplier Integration Register'[Sub-Category]) <> "--"
-        )
-    ) > 0
-
-
-VAR BRTPresent =
-    CALCULATE(
-        COUNTROWS('Supplier Integration Register'),
-        FILTER(
-            'Supplier Integration Register',
-            NOT ISBLANK('Supplier Integration Register'[BRT Validator])
-                && TRIM('Supplier Integration Register'[BRT Validator]) <> ""
-                && TRIM('Supplier Integration Register'[BRT Validator]) <> "-"
-                && TRIM('Supplier Integration Register'[BRT Validator]) <> "--"
-        )
-    ) > 0
-
-
-VAR SAPBNPresent =
-    CALCULATE(
-        COUNTROWS('Supplier Integration Register'),
-        FILTER(
-            'Supplier Integration Register',
-            NOT ISBLANK('Supplier Integration Register'[SAP BN Status])
-                && TRIM('Supplier Integration Register'[SAP BN Status]) <> ""
-                && TRIM('Supplier Integration Register'[SAP BN Status]) <> "-"
-                && TRIM('Supplier Integration Register'[SAP BN Status]) <> "--"
-        )
-    ) > 0
-
-
--- =====================================================
--- VERIFICATION / VALIDATION CHECKS
--- =====================================================
-
-VAR ROVerifiedYes =
-    CALCULATE(
-        COUNTROWS('Supplier Integration Register'),
-        FILTER(
-            'Supplier Integration Register',
-            UPPER(
-                TRIM(
-                    COALESCE(
-                        'Supplier Integration Register'[RO Verified],
-                        ""
-                    )
-                )
-            ) = "YES"
-        )
-    ) > 0
-
-
-VAR PersonaVerifiedYes =
-    CALCULATE(
-        COUNTROWS('Supplier Integration Register'),
-        FILTER(
-            'Supplier Integration Register',
-            UPPER(
-                TRIM(
-                    COALESCE(
-                        'Supplier Integration Register'[Persona Verified],
-                        ""
-                    )
-                )
-            ) = "YES"
-        )
-    ) > 0
-
-
-VAR CategoryVerifiedYes =
-    CALCULATE(
-        COUNTROWS('Supplier Integration Register'),
-        FILTER(
-            'Supplier Integration Register',
-            UPPER(
-                TRIM(
-                    COALESCE(
-                        'Supplier Integration Register'[Category & Sub-Category Verified?],
-                        ""
-                    )
-                )
-            ) = "YES"
-        )
-    ) > 0
-
-
-VAR BRTValidatedYes =
-    CALCULATE(
-        COUNTROWS('Supplier Integration Register'),
-        FILTER(
-            'Supplier Integration Register',
-            UPPER(
-                TRIM(
-                    COALESCE(
-                        'Supplier Integration Register'[BRT Validated],
-                        ""
-                    )
-                )
-            ) = "YES"
-        )
-    ) > 0
-
-
--- =====================================================
--- GAP OUTPUT
--- =====================================================
+VAR Result =
+    GapSupplierName
+        & GapAgreement
+        & GapEPType
+        & GapProcurement
+        & GapComms
+        & GapRO
+        & GapPersona
+        & GapCategory
+        & GapSubCategory
+        & GapCatVerification
+        & GapBRT
 
 RETURN
-
-SWITCH(
-    GapID,
-
-    1,
-        IF(
-            NOT SupplierNamePresent,
-            1,
-            0
-        ),
-
-    2,
-        IF(
-            NOT SupplierNumberPresent,
-            1,
-            0
-        ),
-
-    3,
-        IF(
-            NOT CountryPresent,
-            1,
-            0
-        ),
-
-    4,
-        IF(
-            NOT AgreementPresent,
-            1,
-            0
-        ),
-
-    5,
-        IF(
-            NOT ExternalPartyTypePresent,
-            1,
-            0
-        ),
-
-    6,
-        IF(
-            NOT ProcurementPresent,
-            1,
-            0
-        ),
-
-    7,
-        IF(
-            NOT CommsProgressPresent,
-            1,
-            0
-        ),
-
-    8,
-        IF(
-            NOT ROPresent,
-            1,
-            0
-        ),
-
-    9,
-        IF(
-            ROPresent
-                && NOT ROVerifiedYes,
-            1,
-            0
-        ),
-
-    10,
-        IF(
-            NOT PersonaPresent,
-            1,
-            0
-        ),
-
-    11,
-        IF(
-            PersonaPresent
-                && NOT PersonaVerifiedYes,
-            1,
-            0
-        ),
-
-    12,
-        IF(
-            NOT CategoryPresent,
-            1,
-            0
-        ),
-
-    13,
-        IF(
-            NOT SubCategoryPresent,
-            1,
-            0
-        ),
-
-    14,
-        IF(
-            CategoryPresent
-                && SubCategoryPresent
-                && NOT CategoryVerifiedYes,
-            1,
-            0
-        ),
-
-    15,
-        IF(
-            NOT BRTPresent,
-            1,
-            0
-        ),
-
-    16,
-        IF(
-            BRTPresent
-                && NOT BRTValidatedYes,
-            1,
-            0
-        ),
-
-    17,
-        IF(
-            NOT SAPBNPresent,
-            1,
-            0
-        ),
-
-    0
-)
+    IF(
+        Result = "",
+        "✓ No gaps identified",
+        Result
+    )

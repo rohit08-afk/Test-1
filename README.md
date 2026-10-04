@@ -3,6 +3,12 @@ GL1 Lookup - Gap Areas =
 VAR SupplierName =
     [Selected Supplier Name Display]
 
+VAR SupplierNumber =
+    [Selected Supplier Number]
+
+VAR Country =
+    [Selected Country]
+
 VAR Agreement =
     [Selected Agreement Number]
 
@@ -42,14 +48,31 @@ VAR BRT =
 VAR BRTValidated =
     [Selected BRT Validation]
 
+VAR SAPBN =
+    [Selected SAP BN Status]
 
--- Missing checks
+
+-- ==========================
+-- MISSING VALUE CHECKS
+-- ==========================
 
 VAR SupplierNameMissing =
     ISBLANK(SupplierName)
         || TRIM(SupplierName) = ""
         || TRIM(SupplierName) = "-"
         || TRIM(SupplierName) = "--"
+
+VAR SupplierNumberMissing =
+    ISBLANK(SupplierNumber)
+        || TRIM(SupplierNumber) = ""
+        || TRIM(SupplierNumber) = "-"
+        || TRIM(SupplierNumber) = "--"
+
+VAR CountryMissing =
+    ISBLANK(Country)
+        || TRIM(Country) = ""
+        || TRIM(Country) = "-"
+        || TRIM(Country) = "--"
 
 VAR AgreementMissing =
     ISBLANK(Agreement)
@@ -105,13 +128,35 @@ VAR BRTMissing =
         || TRIM(BRT) = "-"
         || TRIM(BRT) = "--"
 
+VAR SAPBNMissing =
+    ISBLANK(SAPBN)
+        || TRIM(SAPBN) = ""
+        || TRIM(SAPBN) = "-"
+        || TRIM(SAPBN) = "--"
 
--- Individual gap lines
+
+-- ==========================
+-- GAP TEXT
+-- ==========================
 
 VAR GapSupplierName =
     IF(
         SupplierNameMissing,
         "• Supplier Name Missing" & UNICHAR(10),
+        ""
+    )
+
+VAR GapSupplierNumber =
+    IF(
+        SupplierNumberMissing,
+        "• Supplier Number Missing" & UNICHAR(10),
+        ""
+    )
+
+VAR GapCountry =
+    IF(
+        CountryMissing,
+        "• Country Missing" & UNICHAR(10),
         ""
     )
 
@@ -199,23 +244,34 @@ VAR GapBRT =
         )
     )
 
+VAR GapSAPBN =
+    IF(
+        SAPBNMissing,
+        "• SAP BN Status Missing" & UNICHAR(10),
+        ""
+    )
+
 
 VAR Result =
-    GapSupplierName
-        & GapAgreement
-        & GapEPType
-        & GapProcurement
-        & GapComms
-        & GapRO
-        & GapPersona
-        & GapCategory
-        & GapSubCategory
-        & GapCatVerification
-        & GapBRT
+      GapSupplierName
+    & GapSupplierNumber
+    & GapCountry
+    & GapAgreement
+    & GapEPType
+    & GapProcurement
+    & GapComms
+    & GapRO
+    & GapPersona
+    & GapCategory
+    & GapSubCategory
+    & GapCatVerification
+    & GapBRT
+    & GapSAPBN
+
 
 RETURN
-    IF(
-        Result = "",
-        "✓ No gaps identified",
-        Result
-    )
+IF(
+    Result = "",
+    "✓ No gaps identified",
+    Result
+)

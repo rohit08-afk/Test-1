@@ -1,5 +1,23 @@
-Select all
+each try
+    let
+        Tokens =
+            List.Select(
+                Text.Split(Text.Trim([Vendor List]), " "),
+                each _ <> ""
+            ),
 
-I'd write it like this:
+        Pairs =
+            List.Split(Tokens, 2),
 
-Key areas of responsibility include: Client Delivery Workstream Management | Procurement & S2P Advisory | Data & Digital Enablement | Stakeholder Engagement | Process & Operating Model Support
+        FormattedKeys =
+            List.Transform(
+                Pairs,
+                each
+                    if List.Count(_) = 2 then
+                        Text.Upper(_{0}) & "-" & _{1}
+                    else
+                        Text.Upper(_{0})
+            )
+    in
+        Text.Combine(FormattedKeys, " ")
+otherwise null

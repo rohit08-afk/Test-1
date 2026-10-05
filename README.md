@@ -1,72 +1,63 @@
-SUMMARY – SUPPLIER READINESS SUMMARY
+02 – BRT ASSIGNMENT
 Purpose:
-• Provides a consolidated view of supplier readiness across GL1 and GL2, structured around the five readiness stages and eight key readiness indicators defined for the program.
-• Supports leadership review of overall progress, outstanding actions and areas requiring additional follow-up.
+• Provides visibility into BRT Validator assignment and validation across the in-scope GL1 and GL2 supplier populations.
 What this page shows:
-• Five supplier-readiness stages and the associated eight readiness indicators.
-• Current status/progress for each indicator.
-• Target position, where applicable.
-• Indicators requiring additional attention or follow-up.
-• Access to the detailed supporting view for each indicator.
+• BRT Validator assignment.
+• Assigned and unassigned supplier populations.
+• BRT validation status where available.
+• Suppliers requiring validation or additional BRT follow-up.
+• Deployment-specific GL1 and GL2 views.
 How to use:
-• Review the indicators to understand the overall supplier-readiness position.
-• Select View More Details on an indicator to open its detailed supporting page.
-• Detailed pages show the criteria contributing to the indicator and the underlying population requiring action.
-• Where available, use View Suppliers to review the supporting supplier list, select the required columns and export the filtered data to Excel.
-Indicator Guide:
-Below this common content, place your 8 indicator tiles.
-When the user clicks a tile, the right-hand guide section should change to:
-Purpose
-What this indicator shows
-How to use
-Data/availability note, only where required.
-So don't repeat the whole Summary explanation eight times.
-For example:
-Supplier Engagement Coverage → opens its indicator guide.
-RO Readiness / Onboarding Planning → opens its indicator guide.
-And use the exact names of the other six indicators already shown on your Summary page. Don't rename them inside the guide.
-00 – DASHBOARD GUIDE / GENERAL INFORMATION
-Dashboard Purpose:
-• Provides a consolidated view of supplier readiness, assignment, validation, communication and onboarding activities across GL1 and GL2.
-• Supports identification of outstanding actions and supplier-level follow-up required to support deployment readiness.
-Reporting Scope:
-• GL1 – Canada: Suppliers within the agreed GL1 reporting population.
-• GL2 – US & Guyana: Suppliers within the agreed GL2 reporting population.
-• Reporting reflects the applicable deployment scope and agreed supplier inclusion/exclusion criteria.
-Reporting Criteria & Exclusions:
-• Supplier populations are based on the agreed project reporting criteria for the respective deployment.
-• Communication priority, duplicate status, external-party classification and other applicable project criteria are considered in determining the reporting population.
-• For GL2, certain out-of-scope records are already excluded within the curated source data and therefore may not appear in the dashboard.
-Source Systems & Data Coverage:
-• Ariba – supplier/procurement information used within the readiness process.
-• Snowflake – supporting enterprise data used within the supplier-readiness reporting landscape.
-• SAP Business Network (SAP BN) – supplier onboarding and enablement status.
-• Supplier Integration Registers – GL1 and GL2 Smartsheets – primary project tracking sources used for supplier assignment, validation, persona, communication and readiness information.
-• Supporting master/reference data is used for supplier identifiers, mappings and related reporting information.
-• RO onboarding/session attendance and Supplier Impact Guide session information are included where applicable.
-Data Refresh:
-• Dashboard reporting reflects the latest successfully refreshed source data.
-• Refer to the Data Updated date displayed in the dashboard header for the current reporting position.
-Other Notes:
-• Company Codes: Refer to the approved GL1 and GL2 company-code reference for the applicable in-scope company codes.
-• Field Definitions: Refer to the Supplier Integration Register field-definition reference for definitions of the fields and statuses used in the dashboard.
-• Blank information may indicate that the corresponding field has not yet been populated in the source data.
-This is much closer to what we actually built.
-01 – OVERVIEW
-Purpose:
-• Provides a consolidated snapshot of the in-scope supplier population and key supplier-readiness information across GL1 and GL2.
-What this page shows:
-• Overall in-scope supplier population.
-• Persona assignment and verification.
-• BRT Validator assignment and validation.
-• Relationship Owner assignment and verification.
-• Supplier email/contact availability.
-• Communication progress where available.
-• Other key supplier-readiness and completeness indicators.
-How to use:
-• Select GL1 or GL2 to switch between deployment-specific views.
-• Use the available page filters to focus on the required supplier population.
-• Select the applicable View Suppliers button to open the supporting supplier-level list.
-• On the supplier-list page, select the required columns and export the filtered list to Excel where required.
+• Select GL1 or GL2 to review the applicable supplier population.
+• Use the page to identify assignment and validation gaps.
+• Select the supporting supplier-list option to review the underlying supplier records and export the required information.
 Note:
-• GL2 communication-progress information is not currently populated; the related visual will update when the corresponding information is available in the GL2 Supplier Integration Register.
+• GL2 BRT assignment/validation reporting reflects the information currently available in the GL2 Supplier Integration Register.
+• Where the relevant GL2 fields have not yet been populated, the corresponding dashboard information will remain blank until the source is updated.
+03 – PERSONA OVERVIEW
+Purpose:
+• Provides visibility into persona assignment, completeness and verification across GL1 and GL2.
+What this page shows:
+• Overall persona assignment/completeness.
+• Persona verification status.
+• Assigned versus missing persona information.
+• Suppliers requiring additional persona review.
+• GL1 and GL2 persona-readiness information.
+How to use:
+• Select GL1 or GL2 to switch between deployment views.
+• Use the page to identify persona gaps and outstanding validation requirements.
+• Use the supporting supplier-list view for supplier-level review and export where required.
+Note:
+• Persona information is available for both GL1 and GL2 based on the latest information in the respective Supplier Integration Registers.
+04 – COMMS PROGRESS
+Purpose:
+• Tracks procurement communication activity and supplier communication progress across the applicable in-scope supplier population.
+What this page shows:
+• Current communication progress/status.
+• Communication activity and outcomes.
+• Supplier populations across communication stages.
+• Suppliers requiring further communication action or follow-up.
+How to use:
+• Use the page to understand where suppliers currently sit within the communication process.
+• Apply the available filters to focus on the required communication population.
+• Use the supporting supplier-level list to investigate or export the underlying records.
+Note:
+• Communication-progress reporting is currently available for GL1.
+• GL2 communication information will be reflected once the corresponding communication fields are populated in the GL2 Supplier Integration Register.
+05 – SUPPLIER LOOKUP
+Purpose:
+• Provides a consolidated supplier-level view to support quick investigation and follow-up for a selected supplier across GL1 and GL2.
+What this page shows:
+• Supplier identification and master information.
+• BRT Validator and validation status.
+• Relationship Owner and verification status.
+• Persona and verification status.
+• Communication information where available.
+• SAP Business Network onboarding status.
+• Other available supplier-readiness and business information.
+How to use:
+• Select GL1 or GL2 and search for the required supplier.
+• Review the consolidated supplier information available across the connected reporting sources.
+• Use this page when deeper supplier-level investigation is required after reviewing the Summary, Overview or detailed indicator pages.
+Note:
+• Individual fields reflect the latest information available from the respective source systems and Supplier Integration Registers.

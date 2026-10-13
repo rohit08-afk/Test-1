@@ -1,10 +1,15 @@
-if [Is for Material ONLY?] = null or Text.Trim(Text.From([Is for Material ONLY?])) = "" then "Open"
-else if Text.Upper(Text.Trim(Text.From([Is for Material ONLY?]))) = "YES" then "Validated - Yes"
-else if Text.Upper(Text.Trim(Text.From([Is for Material ONLY?]))) = "NO" then "Validated - No"
-else "Other"
+let
+    emails = if [Attendance Supplier] = "Attended"
+        and [Email Address_Webinar] <> null
+        and [#"Duration (minutes)"] <> null
+        then Text.Split([Email Address_Webinar], ";")
+        else {},
+    durations = if [Attendance Supplier] = "Attended"
+        and [Email Address_Webinar] <> null
+        and [#"Duration (minutes)"] <> null
+        then Text.Split([#"Duration (minutes)"], ";")
+        else {}
+in
+    List.Zip({emails, durations})
 
-Open Validation Items =
-CALCULATE(
-    COUNTROWS('Material Supplier Validation'),
-    'Material Supplier Validation'[Validation Status] = "Open"
-)
+    

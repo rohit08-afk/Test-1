@@ -1,47 +1,30 @@
-GL1 Webinar Completed =
-VAR CompletedDomains =
-    CALCULATETABLE(
-        VALUES('GL1 - Supplier Webinar'[Domain Name]),
-        'GL1 - Supplier Webinar'[Attendee Duration] >= 30
+GL1 Webinar Supplier Status =
+VAR SupplierDomain =
+    SELECTEDVALUE(
+        'GL1 Webinar Supplier lookup'[Domain Name]
     )
-RETURN
+VAR AttendanceRows =
     CALCULATE(
-        DISTINCTCOUNT('GL1 Webinar Supplier lookup'[Supplier Name]),
+        COUNTROWS('GL1 - Supplier Webinar'),
         TREATAS(
-            CompletedDomains,
-            'GL1 Webinar Supplier lookup'[Domain Name]
-        )
-    ) + 0
-
-
-    GL1 Webinar Not Attended =
-VAR AttendedDomains =
-    VALUES('GL1 - Supplier Webinar'[Domain Name])
-VAR NotAttendedSuppliers =
-    FILTER(
-        'GL1 Webinar Supplier lookup',
-        NOT (
-            'GL1 Webinar Supplier lookup'[Domain Name]
-                IN AttendedDomains
+            {SupplierDomain},
+            'GL1 - Supplier Webinar'[Domain Name]
         )
     )
-RETURN
-    COUNTROWS(NotAttendedSuppliers) + 0
-
-
-   GL1 Webinar Short Attendance =
-VAR AttendedDomains =
-    VALUES('GL1 - Supplier Webinar'[Domain Name])
-VAR CompletedDomains =
-    CALCULATETABLE(
-        VALUES('GL1 - Supplier Webinar'[Domain Name]),
-        'GL1 - Supplier Webinar'[Attendee Duration] >= 30
-    )
-RETURN
+VAR CompletedRows =
     CALCULATE(
-        DISTINCTCOUNT('GL1 Webinar Supplier lookup'[Supplier Name]),
+        COUNTROWS('GL1 - Supplier Webinar'),
+        'GL1 - Supplier Webinar'[Attendee Duration] >= 30,
         TREATAS(
-            EXCEPT(AttendedDomains, CompletedDomains),
-            'GL1 Webinar Supplier lookup'[Domain Name]
+            {SupplierDomain},
+            'GL1 - Supplier Webinar'[Domain Name]
         )
-    ) + 0 
+    )
+RETURN
+    SWITCH(
+        TRUE(),
+        ISBLANK(SupplierDomain), BLANK(),
+        CompletedRows > 0, "Completed",
+        AttendanceRows > 0, "Short Attendance",
+        "Not Attended"
+    )

@@ -1,32 +1,38 @@
-GL1 Webinar Session Invited =
-VAR SupplierDomain =
-    SELECTEDVALUE('GL1 Webinar Supplier lookup'[Domain Name])
-RETURN
-    CALCULATE(
-        CONCATENATEX(
-            VALUES('GL1 Raw - Supplier Webinar'[Session Invited]),
-            'GL1 Raw - Supplier Webinar'[Session Invited],
-            ", "
-        ),
-        TREATAS(
-            {SupplierDomain},
-            'GL1 Raw - Supplier Webinar'[Domain Name]
-        )
-    )
+GL1 Webinar High Priority Total =
+CALCULATE(
+    [GL1 Webinar Total Suppliers],
+    'GL1 Webinar Supplier lookup'[Comms Priority] = "High"
+)
 
+GL1 Webinar High Priority Completed =
+CALCULATE(
+    [GL1 Webinar Completed],
+    'GL1 Webinar Supplier lookup'[Comms Priority] = "High"
+)
 
-    GL1 Webinar Attendee Count =
-VAR SupplierDomain =
-    SELECTEDVALUE('GL1 Webinar Supplier lookup'[Domain Name])
-RETURN
-    CALCULATE(
-        DISTINCTCOUNT('GL1 - Supplier Webinar'[Attendee Email]),
-        TREATAS(
-            {SupplierDomain},
-            'GL1 - Supplier Webinar'[Domain Name]
-        )
-    ) + 0
+GL1 Webinar Medium Priority Total =
+CALCULATE(
+    [GL1 Webinar Total Suppliers],
+    'GL1 Webinar Supplier lookup'[Comms Priority] = "Medium"
+)
 
+GL1 Webinar Medium Priority Completed =
+CALCULATE(
+    [GL1 Webinar Completed],
+    'GL1 Webinar Supplier lookup'[Comms Priority] = "Medium"
+)
 
+GL1 Webinar High Completion % =
+DIVIDE(
+    [GL1 Webinar High Priority Completed],
+    [GL1 Webinar High Priority Total],
+    0
+)
 
-    
+GL1 Webinar Medium Completion % =
+DIVIDE(
+    [GL1 Webinar Medium Priority Completed],
+    [GL1 Webinar Medium Priority Total],
+    0
+)
+

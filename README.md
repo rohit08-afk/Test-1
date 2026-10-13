@@ -1,30 +1,32 @@
-GL1 Webinar Supplier Status =
+GL1 Webinar Session Invited =
 VAR SupplierDomain =
-    SELECTEDVALUE(
-        'GL1 Webinar Supplier lookup'[Domain Name]
-    )
-VAR AttendanceRows =
-    CALCULATE(
-        COUNTROWS('GL1 - Supplier Webinar'),
-        TREATAS(
-            {SupplierDomain},
-            'GL1 - Supplier Webinar'[Domain Name]
-        )
-    )
-VAR CompletedRows =
-    CALCULATE(
-        COUNTROWS('GL1 - Supplier Webinar'),
-        'GL1 - Supplier Webinar'[Attendee Duration] >= 30,
-        TREATAS(
-            {SupplierDomain},
-            'GL1 - Supplier Webinar'[Domain Name]
-        )
-    )
+    SELECTEDVALUE('GL1 Webinar Supplier lookup'[Domain Name])
 RETURN
-    SWITCH(
-        TRUE(),
-        ISBLANK(SupplierDomain), BLANK(),
-        CompletedRows > 0, "Completed",
-        AttendanceRows > 0, "Short Attendance",
-        "Not Attended"
+    CALCULATE(
+        CONCATENATEX(
+            VALUES('GL1 Raw - Supplier Webinar'[Session Invited]),
+            'GL1 Raw - Supplier Webinar'[Session Invited],
+            ", "
+        ),
+        TREATAS(
+            {SupplierDomain},
+            'GL1 Raw - Supplier Webinar'[Domain Name]
+        )
     )
+
+
+    GL1 Webinar Attendee Count =
+VAR SupplierDomain =
+    SELECTEDVALUE('GL1 Webinar Supplier lookup'[Domain Name])
+RETURN
+    CALCULATE(
+        DISTINCTCOUNT('GL1 - Supplier Webinar'[Attendee Email]),
+        TREATAS(
+            {SupplierDomain},
+            'GL1 - Supplier Webinar'[Domain Name]
+        )
+    ) + 0
+
+
+
+    

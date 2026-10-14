@@ -1,27 +1,19 @@
-Dashboard Purpose
-Provides a consolidated view of supplier readiness, assignment, validation, communication and onboarding activities across GL1 and GL2.
-Supports identification of outstanding actions and supplier-level follow-up required for deployment readiness.
-Reporting Scope
-GL1 – Canada: Suppliers within the agreed GL1 reporting population.
-GL2 – US & Guyana: Suppliers within the agreed GL2 reporting population.
-Reporting reflects the applicable deployment scope and agreed supplier inclusion/exclusion criteria.
-Reporting Criteria & Exclusions
-Supplier populations are based on the agreed project reporting criteria for each deployment.
-Communication priority, duplicate status, external-party classification and other applicable criteria are considered when determining the reporting population.
-Certain out-of-scope records may already be excluded within the curated source data and therefore may not appear in the dashboard.
-Source Systems & Data Coverage
-Supplier Integration Registers: Primary project tracking source for supplier assignment, persona, communication and readiness information.
-Ariba, Snowflake and SAP Business Network: Supporting supplier, procurement and onboarding information where applicable.
-Supporting master/reference data and session-attendance information are incorporated where required.
-Key Definitions & Methodology
-Supplier Segmentation: Suppliers are categorized as High, Medium or Low based on the agreed segmentation methodology to determine the appropriate level of supplier engagement.
-Supplier Email: Contacts are identified through the approved supplier email discovery process using available supplier and procurement sources; the final reporting contact is captured in the Supplier Integration Register.
-Relationship Owner (RO): Assigned supplier owner recorded in the Supplier Integration Register.
-Agreement Number: Agreement associated with the supplier and captured in the Supplier Integration Register.
-Data Refresh
-Dashboard reporting reflects the latest successfully refreshed source data.
-Refer to the Data Updated date shown in the dashboard header for the current reporting position.
-Other Notes
-Company Codes: Refer to the approved GL1 and GL2 company-code reference for applicable in-scope company codes.
-Field Definitions: Refer to the Supplier List Smartsheet field definitions for detailed source-field descriptions.
-Blank information may indicate that the corresponding field has not yet been populated in the source data.
+Use this:
+Purpose
+Shows whether suppliers attended the applicable supplier webinar/session.
+Helps identify suppliers that may need follow-up.
+What this indicator shows
+Overall supplier attendance rate
+Suppliers who Attended
+Suppliers who Did Not Attend
+Attendance by supplier priority
+Supplier, RO and follow-up details for suppliers that did not attend
+How to use
+Review the overall attendance rate
+Use the KPI cards to see Attended and Did Not Attend supplier counts
+Use the filters to focus on a specific Persona, Category Family, Priority, Webinar Session, RO or Attendance Status
+Review the follow-up section to see the supplier, assigned RO and the gap requiring action
+Use the detailed table at the bottom to review supplier-level attendance information
+Note
+Attendance reflects the latest available webinar/session attendance data included in the dashboard.
+Supplier definitions and source information are available on the main Dashboard Guide page.

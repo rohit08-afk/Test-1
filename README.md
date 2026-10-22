@@ -6,15 +6,15 @@
   },
   "transform": [
     {
-      "calculate": "datum['Attended'] == null ? 0 : datum['Attended']",
+      "calculate": "isValid(datum['Attended']) ? +datum['Attended'] : 0",
       "as": "Attended Count"
     },
     {
-      "calculate": "datum['Not Attended'] == null ? 0 : datum['Not Attended']",
+      "calculate": "isValid(datum['Not Attended']) ? +datum['Not Attended'] : 0",
       "as": "Not Attended Count"
     },
     {
-      "calculate": "datum['Attended %'] <= 1 ? format(datum['Attended %'], '.0%') : format(datum['Attended %'], '.0f') + '%'",
+      "calculate": "isValid(datum['Attended %']) ? (datum['Attended %'] <= 1 ? format(datum['Attended %'], '.0%') : format(datum['Attended %'], '.0f') + '%') : '—'",
       "as": "Rate Label"
     },
     {
@@ -39,9 +39,9 @@
   "spacing": 8,
   "hconcat": [
     {
-      "width": "container",
+      "width": 310,
       "height": {
-        "step": 25
+        "step": 24
       },
       "encoding": {
         "y": {
@@ -62,26 +62,6 @@
           "type": "quantitative",
           "stack": "zero",
           "axis": null
-        },
-        "color": {
-          "field": "Attendance Status",
-          "type": "nominal",
-          "scale": {
-            "domain": [
-              "Attended",
-              "Not Attended"
-            ],
-            "range": [
-              "#16A085",
-              "#F28C45"
-            ]
-          },
-          "legend": {
-            "orient": "top",
-            "title": null,
-            "labelFontSize": 10,
-            "symbolSize": 90
-          }
         },
         "order": {
           "field": "Sort Order",
@@ -109,18 +89,42 @@
           "mark": {
             "type": "bar",
             "height": 16
+          },
+          "encoding": {
+            "color": {
+              "field": "Attendance Status",
+              "type": "nominal",
+              "scale": {
+                "domain": [
+                  "Attended",
+                  "Not Attended"
+                ],
+                "range": [
+                  "#16A085",
+                  "#F28C45"
+                ]
+              },
+              "legend": {
+                "orient": "top",
+                "title": null,
+                "labelFontSize": 10,
+                "symbolSize": 90
+              }
+            }
           }
         },
         {
           "mark": {
             "type": "text",
-            "color": "white",
-            "fontSize": 10,
+            "fontSize": 11,
             "fontWeight": "bold",
             "align": "center",
             "baseline": "middle"
           },
           "encoding": {
+            "color": {
+              "value": "#FFFFFF"
+            },
             "text": {
               "field": "Count",
               "type": "quantitative",
@@ -140,7 +144,7 @@
     {
       "width": 55,
       "height": {
-        "step": 25
+        "step": 24
       },
       "transform": [
         {
@@ -152,7 +156,8 @@
         "fontSize": 12,
         "fontWeight": "bold",
         "color": "#17365D",
-        "align": "center"
+        "align": "center",
+        "baseline": "middle"
       },
       "encoding": {
         "y": {

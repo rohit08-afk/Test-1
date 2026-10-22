@@ -14,41 +14,12 @@
       "as": "Not Attended Count"
     },
     {
+      "calculate": "isValid(datum['Total Suppliers']) ? +datum['Total Suppliers'] : datum['Attended Count'] + datum['Not Attended Count']",
+      "as": "Supplier Total"
+    },
+    {
       "calculate": "isValid(datum['Attended %']) ? (datum['Attended %'] <= 1 ? format(datum['Attended %'], '.0%') : format(datum['Attended %'], '.0f') + '%') : '—'",
       "as": "Rate Label"
-    },
-    {
-      "fold": [
-        "Attended Count",
-        "Not Attended Count"
-      ],
-      "as": [
-        "Status",
-        "Count"
-      ]
-    },
-    {
-      "calculate": "datum.Status == 'Attended Count' ? 'Attended' : 'Not Attended'",
-      "as": "Attendance Status"
-    },
-    {
-      "calculate": "datum.Status == 'Attended Count' ? 0 : 1",
-      "as": "Sort Order"
-    },
-    {
-      "stack": "Count",
-      "groupby": ["Category Family"],
-      "sort": [
-        {
-          "field": "Sort Order",
-          "order": "ascending"
-        }
-      ],
-      "as": ["x0", "x1"]
-    },
-    {
-      "calculate": "(datum.x0 + datum.x1) / 2",
-      "as": "Label Midpoint"
     }
   ],
   "spacing": 8,
@@ -58,6 +29,41 @@
       "height": {
         "step": 24
       },
+      "transform": [
+        {
+          "fold": [
+            "Attended Count",
+            "Not Attended Count"
+          ],
+          "as": [
+            "Status",
+            "Count"
+          ]
+        },
+        {
+          "calculate": "datum.Status == 'Attended Count' ? 'Attended' : 'Not Attended'",
+          "as": "Attendance Status"
+        },
+        {
+          "calculate": "datum.Status == 'Attended Count' ? 0 : 1",
+          "as": "Sort Order"
+        },
+        {
+          "stack": "Count",
+          "groupby": ["Category Family"],
+          "sort": [
+            {
+              "field": "Sort Order",
+              "order": "ascending"
+            }
+          ],
+          "as": ["x0", "x1"]
+        },
+        {
+          "calculate": "(datum.x0 + datum.x1) / 2",
+          "as": "Label Midpoint"
+        }
+      ],
       "encoding": {
         "y": {
           "field": "Category Family",
@@ -134,8 +140,7 @@
             "fontSize": 11,
             "fontWeight": "bold",
             "align": "center",
-            "baseline": "middle",
-            "color": "#FFFFFF"
+            "baseline": "middle"
           },
           "encoding": {
             "x": {
@@ -166,11 +171,39 @@
       "height": {
         "step": 24
       },
-      "transform": [
-        {
-          "filter": "datum['Attendance Status'] == 'Attended'"
+      "mark": {
+        "type": "text",
+        "fontSize": 11,
+        "fontWeight": "bold",
+        "color": "#17365D",
+        "align": "center",
+        "baseline": "middle"
+      },
+      "encoding": {
+        "y": {
+          "field": "Category Family",
+          "type": "nominal",
+          "sort": "ascending",
+          "axis": null
+        },
+        "text": {
+          "field": "Supplier Total",
+          "type": "quantitative",
+          "format": ".0f"
         }
-      ],
+      },
+      "title": {
+        "text": "Total",
+        "fontSize": 11,
+        "fontWeight": "bold",
+        "color": "#17365D"
+      }
+    },
+    {
+      "width": 55,
+      "height": {
+        "step": 24
+      },
       "mark": {
         "type": "text",
         "fontSize": 12,
@@ -190,6 +223,12 @@
           "field": "Rate Label",
           "type": "nominal"
         }
+      },
+      "title": {
+        "text": "Rate",
+        "fontSize": 11,
+        "fontWeight": "bold",
+        "color": "#17365D"
       }
     }
   ],

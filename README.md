@@ -14,11 +14,15 @@
       "as": "Not Attended Count"
     },
     {
-      "calculate": "isValid(datum['Total Suppliers']) ? +datum['Total Suppliers'] : datum['Attended Count'] + datum['Not Attended Count']",
+      "calculate": "datum['Attended Count'] + datum['Not Attended Count']",
+      "as": "Calculated Total"
+    },
+    {
+      "calculate": "isValid(datum['Total Suppliers']) ? +datum['Total Suppliers'] : datum['Calculated Total']",
       "as": "Supplier Total"
     },
     {
-      "calculate": "isValid(datum['Attended %']) ? (datum['Attended %'] <= 1 ? format(datum['Attended %'], '.0%') : format(datum['Attended %'], '.0f') + '%') : '—'",
+      "calculate": "datum['Calculated Total'] > 0 ? format(datum['Attended Count'] / datum['Calculated Total'], '.0%') : '—'",
       "as": "Rate Label"
     }
   ],

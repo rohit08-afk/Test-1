@@ -1,19 +1,108 @@
-Use this:
-Purpose
-Shows whether suppliers attended the applicable supplier webinar/session.
-Helps identify suppliers that may need follow-up.
-What this indicator shows
-Overall supplier attendance rate
-Suppliers who Attended
-Suppliers who Did Not Attend
-Attendance by supplier priority
-Supplier, RO and follow-up details for suppliers that did not attend
-How to use
-Review the overall attendance rate
-Use the KPI cards to see Attended and Did Not Attend supplier counts
-Use the filters to focus on a specific Persona, Category Family, Priority, Webinar Session, RO or Attendance Status
-Review the follow-up section to see the supplier, assigned RO and the gap requiring action
-Use the detailed table at the bottom to review supplier-level attendance information
-Note
-Attendance reflects the latest available webinar/session attendance data included in the dashboard.
-Supplier definitions and source information are available on the main Dashboard Guide page.
+
+{
+  "data": {"name": "dataset"},
+  "transform": [
+    {
+      "calculate": "datum['Attended'] + datum['Not Attended']",
+      "as": "Total"
+    },
+    {
+      "calculate": "datum['Attended %'] <= 1 ? format(datum['Attended %'], '.0%') : format(datum['Attended %'], '.0f') + '%'",
+      "as": "Rate Label"
+    }
+  ],
+  "spacing": 8,
+  "hconcat": [
+    {
+      "width": 340,
+      "height": {"step": 38},
+      "transform": [
+        {
+          "fold": ["Attended", "Not Attended"],
+          "as": ["Status", "Count"]
+        }
+      ],
+      "mark": {
+        "type": "bar",
+        "height": 23
+      },
+      "encoding": {
+        "y": {
+          "field": "Category Family",
+          "type": "nominal",
+          "sort": "ascending",
+          "axis": {
+            "title": null,
+            "labelFontSize": 11,
+            "labelLimit": 150,
+            "ticks": false,
+            "domain": false
+          }
+        },
+        "x": {
+          "field": "Count",
+          "type": "quantitative",
+          "stack": "zero",
+          "axis": {
+            "title": null,
+            "grid": false
+          }
+        },
+        "color": {
+          "field": "Status",
+          "type": "nominal",
+          "scale": {
+            "domain": ["Attended", "Not Attended"],
+            "range": ["#16A085", "#F28C45"]
+          },
+          "legend": {
+            "orient": "top",
+            "title": null
+          }
+        },
+        "order": {
+          "field": "Status",
+          "sort": "ascending"
+        },
+        "tooltip": [
+          {"field": "Category Family"},
+          {"field": "Status"},
+          {"field": "Count"}
+        ]
+      }
+    },
+    {
+      "width": 65,
+      "height": {"step": 38},
+      "mark": {
+        "type": "text",
+        "fontSize": 13,
+        "fontWeight": "bold",
+        "color": "#17365D"
+      },
+      "encoding": {
+        "y": {
+          "field": "Category Family",
+          "type": "nominal",
+          "sort": "ascending",
+          "axis": null
+        },
+        "text": {
+          "field": "Rate Label",
+          "type": "nominal"
+        }
+      }
+    }
+  ],
+  "resolve": {
+    "scale": {
+      "y": "shared"
+    }
+  },
+  "config": {
+    "view": {
+      "stroke": null
+    },
+    "background": "transparent"
+  }
+}

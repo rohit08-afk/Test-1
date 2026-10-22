@@ -34,6 +34,21 @@
     {
       "calculate": "datum.Status == 'Attended Count' ? 0 : 1",
       "as": "Sort Order"
+    },
+    {
+      "stack": "Count",
+      "groupby": ["Category Family"],
+      "sort": [
+        {
+          "field": "Sort Order",
+          "order": "ascending"
+        }
+      ],
+      "as": ["x0", "x1"]
+    },
+    {
+      "calculate": "(datum.x0 + datum.x1) / 2",
+      "as": "Label Midpoint"
     }
   ],
   "spacing": 8,
@@ -58,15 +73,12 @@
           }
         },
         "x": {
-          "field": "Count",
+          "field": "x1",
           "type": "quantitative",
-          "stack": "zero",
-          "axis": null
-        },
-        "order": {
-          "field": "Sort Order",
-          "type": "quantitative",
-          "sort": "ascending"
+          "axis": null,
+          "scale": {
+            "zero": true
+          }
         },
         "tooltip": [
           {
@@ -91,6 +103,9 @@
             "height": 16
           },
           "encoding": {
+            "x2": {
+              "field": "x0"
+            },
             "color": {
               "field": "Attendance Status",
               "type": "nominal",
@@ -119,16 +134,21 @@
             "fontSize": 11,
             "fontWeight": "bold",
             "align": "center",
-            "baseline": "middle"
+            "baseline": "middle",
+            "color": "#FFFFFF"
           },
           "encoding": {
-            "color": {
-              "value": "#FFFFFF"
+            "x": {
+              "field": "Label Midpoint",
+              "type": "quantitative"
             },
             "text": {
               "field": "Count",
               "type": "quantitative",
               "format": ".0f"
+            },
+            "color": {
+              "value": "#FFFFFF"
             },
             "opacity": {
               "condition": {

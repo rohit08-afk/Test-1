@@ -1,57 +1,18 @@
-GL1 High Priority Not Attended =
-VAR CurrentPersona =
-    SELECTEDVALUE('GL1 Webinar Measures'[Persona])
-
-VAR RegisterPersona =
-    IF(
-        CurrentPersona = "Beeline - Identity Creation , Services",
-        "Services, Beeline - Identity Creation",
-        CurrentPersona
+GL1 Check Medium Total =
+CALCULATE(
+    [GL1 Webinar Total by Persona],
+    TREATAS(
+        {"Medium"},
+        'Supplier Integration Register'[Comms Priority]
     )
+)
 
-VAR TotalHigh =
-    CALCULATE(
-        [GL1 Total Suppliers],
-        REMOVEFILTERS('Supplier Integration Register'[Persona]),
-        'Supplier Integration Register'[Persona] = RegisterPersona,
-        'Supplier Integration Register'[Comms Priority] = "High"
+
+GL1 Check High Total =
+CALCULATE(
+    [GL1 Webinar Total by Persona],
+    TREATAS(
+        {"High"},
+        'Supplier Integration Register'[Comms Priority]
     )
-
-VAR AttendedHigh =
-    CALCULATE(
-        [GL1 Webinar Attended Corrected],
-        'GL1 Webinar Measures'[Comms Priority] = "High"
-    )
-
-RETURN
-    TotalHigh - AttendedHigh
-
-
-
-    GL1 Medium Priority Not Attended =
-VAR CurrentPersona =
-    SELECTEDVALUE('GL1 Webinar Measures'[Persona])
-
-VAR RegisterPersona =
-    IF(
-        CurrentPersona = "Beeline - Identity Creation , Services",
-        "Services, Beeline - Identity Creation",
-        CurrentPersona
-    )
-
-VAR TotalMedium =
-    CALCULATE(
-        [GL1 Total Suppliers],
-        REMOVEFILTERS('Supplier Integration Register'[Persona]),
-        'Supplier Integration Register'[Persona] = RegisterPersona,
-        'Supplier Integration Register'[Comms Priority] = "Medium"
-    )
-
-VAR AttendedMedium =
-    CALCULATE(
-        [GL1 Webinar Attended Corrected],
-        'GL1 Webinar Measures'[Comms Priority] = "Medium"
-    )
-
-RETURN
-    TotalMedium - AttendedMedium
+)

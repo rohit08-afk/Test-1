@@ -1,31 +1,36 @@
 Target High Total =
-CALCULATE(
-    [Total Suppliers],
-    KEEPFILTERS(
-        'Supplier Integration Register'[Comms Priority] = "High"
-    ),
-    TREATAS(
+VAR PersonaFiltered =
+    ISFILTERED('GL1 Webinar Measures'[Persona])
+
+VAR SelectedPersonas =
+    SELECTCOLUMNS(
         VALUES('GL1 Webinar Measures'[Persona]),
-        'Supplier Integration Register'[Persona]
-    )
-)
-
-
-Target High Attended =
-VAR HighSuppliers =
-    CALCULATETABLE(
-        VALUES('Supplier Integration Register'[Name]),
-        KEEPFILTERS(
-            'Supplier Integration Register'[Comms Priority] = "High"
+        "PersonaName",
+        SWITCH(
+            'GL1 Webinar Measures'[Persona],
+            "Beeline - Identity Creation , Services",
+            "Services, Beeline - Identity Creation",
+            'GL1 Webinar Measures'[Persona]
         )
     )
+
 RETURN
-CALCULATE(
-    [Webinar Attended],
-    KEEPFILTERS(
+IF(
+    PersonaFiltered,
+    CALCULATE(
+        [Total Suppliers],
+        KEEPFILTERS(
+            'Supplier Integration Register'[Comms Priority] = "High"
+        ),
         TREATAS(
-            HighSuppliers,
-            'GL1 Webinar Measures'[Supplier Name]
+            SelectedPersonas,
+            'Supplier Integration Register'[Persona]
+        )
+    ),
+    CALCULATE(
+        [Total Suppliers],
+        KEEPFILTERS(
+            'Supplier Integration Register'[Comms Priority] = "High"
         )
     )
 )

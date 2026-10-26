@@ -1,4 +1,4 @@
-Target High Total =
+Target Medium Total =
 VAR PersonaFiltered =
     ISFILTERED('GL1 Webinar Measures'[Persona])
 
@@ -20,7 +20,7 @@ IF(
     CALCULATE(
         [Total Suppliers],
         KEEPFILTERS(
-            'Supplier Integration Register'[Comms Priority] = "High"
+            'Supplier Integration Register'[Comms Priority] = "Medium"
         ),
         TREATAS(
             SelectedPersonas,
@@ -30,7 +30,7 @@ IF(
     CALCULATE(
         [Total Suppliers],
         KEEPFILTERS(
-            'Supplier Integration Register'[Comms Priority] = "High"
+            'Supplier Integration Register'[Comms Priority] = "Medium"
         )
     )
 )

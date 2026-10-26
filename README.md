@@ -1,6 +1,8 @@
-VAR RegisterPersona =
-    IF(
-        CurrentPersona = "Beeline - Identity Creation , Services",
-        "Services, Beeline - Identity Creation",
-        CurrentPersona
+GL1 Webinar Total by Persona =
+CALCULATE(
+    [GL1 Total Suppliers],
+    TREATAS(
+        VALUES('GL1 Webinar Measures'[Persona]),
+        'Supplier Integration Register'[Persona]
     )
+)

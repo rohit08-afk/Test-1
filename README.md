@@ -1,32 +1,36 @@
-Suppliers in scope =
-[Target High Total] + [Target Medium Total]
-
-
-Webinar Not Attended =
-[Suppliers in scope] - [Webinar Attended]
-
-
-High Priority Not Attended =
-[Target High Total] - [Target High Attended]
-
-
-
-Medium Priority Not Attended =
-[Target Medium Total] - [Target Medium Attended]
-
-
-GL1 Webinar Attendance Rate =
-DIVIDE(
-    [Webinar Attended],
-    [Suppliers in scope],
-    0
+Drilldown Category =
+DATATABLE(
+    "Category", STRING,
+    {
+        {"Webinar Attended"},
+        {"Webinar Not Attended"},
+        {"High Priority Not Attended"},
+        {"Medium Priority Not Attended"}
+    }
 )
 
 
-Weekly Change PP =
-(
-    [GL1 Webinar Attendance Rate]
-    - [GL1 Summary Last Week Rate]
-) * 100
+Drilldown Show Supplier =
+VAR SelectedCategory =
+    SELECTEDVALUE('Drilldown Category'[Category])
+
+VAR Attended =
+    [GL1 Webinar Attended] > 0
+
+VAR Priority =
+    SELECTEDVALUE('GL1 Webinar Measures'[Comms Priority])
+
+RETURN
+SWITCH(
+    SelectedCategory,
+    "Webinar Attended", IF(Attended, 1, 0),
+    "Webinar Not Attended", IF(NOT Attended, 1, 0),
+    "High Priority Not Attended",
+        IF(NOT Attended && Priority = "High", 1, 0),
+    "Medium Priority Not Attended",
+        IF(NOT Attended && Priority = "Medium", 1, 0),
+    0
+)
+
 
 

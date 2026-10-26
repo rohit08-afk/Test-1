@@ -1,36 +1,16 @@
-Target Medium Total =
-VAR PersonaFiltered =
-    ISFILTERED('GL1 Webinar Measures'[Persona])
-
-VAR SelectedPersonas =
-    SELECTCOLUMNS(
-        VALUES('GL1 Webinar Measures'[Persona]),
-        "PersonaName",
-        SWITCH(
-            'GL1 Webinar Measures'[Persona],
-            "Beeline - Identity Creation , Services",
-            "Services, Beeline - Identity Creation",
-            'GL1 Webinar Measures'[Persona]
-        )
+Target Medium Attended =
+VAR MediumSuppliers =
+    CALCULATETABLE(
+        VALUES('Supplier Integration Register'[Name]),
+        'Supplier Integration Register'[Comms Priority] = "Medium"
     )
-
 RETURN
-IF(
-    PersonaFiltered,
-    CALCULATE(
-        [Total Suppliers],
-        KEEPFILTERS(
-            'Supplier Integration Register'[Comms Priority] = "Medium"
-        ),
+CALCULATE(
+    [Webinar Attended],
+    KEEPFILTERS(
         TREATAS(
-            SelectedPersonas,
-            'Supplier Integration Register'[Persona]
-        )
-    ),
-    CALCULATE(
-        [Total Suppliers],
-        KEEPFILTERS(
-            'Supplier Integration Register'[Comms Priority] = "Medium"
+            MediumSuppliers,
+            'GL1 Webinar Measures'[Supplier Name]
         )
     )
 )

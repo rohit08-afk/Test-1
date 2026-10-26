@@ -1,20 +1,27 @@
 GL1 Webinar Suppliers Not Attended =
+VAR CurrentPersona =
+    VALUES('GL1 Supplier Webinar Attendance'[Persona])
+
 VAR AllSuppliers =
     CALCULATETABLE(
         VALUES('GL1 Supplier Webinar Attendance'[Supplier Name]),
-        REMOVEFILTERS(
-            'GL1 Supplier Webinar Attendance'[Attendance Status]
+        REMOVEFILTERS('GL1 Supplier Webinar Attendance'),
+        TREATAS(
+            CurrentPersona,
+            'GL1 Supplier Webinar Attendance'[Persona]
         )
     )
+
 VAR AttendedSuppliers =
     CALCULATETABLE(
         VALUES('GL1 Supplier Webinar Attendance'[Supplier Name]),
-        REMOVEFILTERS(
-            'GL1 Supplier Webinar Attendance'[Attendance Status]
+        REMOVEFILTERS('GL1 Supplier Webinar Attendance'),
+        TREATAS(
+            CurrentPersona,
+            'GL1 Supplier Webinar Attendance'[Persona]
         ),
         'GL1 Supplier Webinar Attendance'[Attendance Status] = "Attended"
     )
+
 RETURN
-    COUNTROWS(
-        EXCEPT(AllSuppliers, AttendedSuppliers)
-    )
+    COUNTROWS(EXCEPT(AllSuppliers, AttendedSuppliers))

@@ -1,32 +1,11 @@
-Webinar Attendance Status =
-VAR SupplierDomain =
-    'GL1 Webinar Supplier lookup'[Domain Name]
-
-VAR AttendanceRows =
-    CALCULATE(
-        COUNTROWS('GL1 - Supplier Webinar'),
-        FILTER(
-            ALL('GL1 - Supplier Webinar'),
-            'GL1 - Supplier Webinar'[Domain Name] = SupplierDomain
-                && NOT ISBLANK('GL1 - Supplier Webinar'[Attendee Email])
-        )
-    )
-
-VAR CompletedRows =
-    CALCULATE(
-        COUNTROWS('GL1 - Supplier Webinar'),
-        FILTER(
-            ALL('GL1 - Supplier Webinar'),
-            'GL1 - Supplier Webinar'[Domain Name] = SupplierDomain
-                && 'GL1 - Supplier Webinar'[Attendee Duration] >= 30
-        )
-    )
-
-RETURN
-    SWITCH(
-        TRUE(),
-        ISBLANK(SupplierDomain), BLANK(),
-        CompletedRows > 0, "Completed",
-        AttendanceRows > 0, "Short Attendance",
-        "Not Attended"
-    )
+=LET(
+ m,FILTER(Material_Supplier!A3:M10000,Material_Supplier!B3:B10000<>""),
+ s,FILTER(Service_Supplier!A3:J10000,Service_Supplier!B3:B10000<>""),
+ md,CHOOSECOLS(m,1,2,3,4,5,6,7),
+ sd,CHOOSECOLS(s,1,2,3,4,5,6,7),
+ VSTACK(
+  HSTACK(md,IF(SEQUENCE(ROWS(m)),"18-Sep-2026"),CHOOSECOLS(m,8,9,10)),
+  HSTACK(md,IF(SEQUENCE(ROWS(m)),"15-Oct-2026"),CHOOSECOLS(m,11,12,13)),
+  HSTACK(sd,IF(SEQUENCE(ROWS(s)),"21-Oct-2026"),CHOOSECOLS(s,8,9,10))
+ )
+)

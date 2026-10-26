@@ -1,16 +1,50 @@
-Target Medium Attended =
-VAR MediumSuppliers =
-    CALCULATETABLE(
-        VALUES('Supplier Integration Register'[Name]),
-        'Supplier Integration Register'[Comms Priority] = "Medium"
-    )
+Target High Total =
+VAR SelectedSuppliers =
+    VALUES('GL1 Webinar Measures'[Supplier Name])
 RETURN
-CALCULATE(
-    [Webinar Attended],
-    KEEPFILTERS(
+IF(
+    ISCROSSFILTERED('GL1 Webinar Measures'[Supplier Name]),
+    CALCULATE(
+        [Total Suppliers],
+        KEEPFILTERS(
+            'Supplier Integration Register'[Comms Priority] = "High"
+        ),
         TREATAS(
-            MediumSuppliers,
-            'GL1 Webinar Measures'[Supplier Name]
+            SelectedSuppliers,
+            'Supplier Integration Register'[Name]
+        )
+    ),
+    CALCULATE(
+        [Total Suppliers],
+        KEEPFILTERS(
+            'Supplier Integration Register'[Comms Priority] = "High"
         )
     )
 )
+
+
+
+Target Medium Total =
+VAR SelectedSuppliers =
+    VALUES('GL1 Webinar Measures'[Supplier Name])
+RETURN
+IF(
+    ISCROSSFILTERED('GL1 Webinar Measures'[Supplier Name]),
+    CALCULATE(
+        [Total Suppliers],
+        KEEPFILTERS(
+            'Supplier Integration Register'[Comms Priority] = "Medium"
+        ),
+        TREATAS(
+            SelectedSuppliers,
+            'Supplier Integration Register'[Name]
+        )
+    ),
+    CALCULATE(
+        [Total Suppliers],
+        KEEPFILTERS(
+            'Supplier Integration Register'[Comms Priority] = "Medium"
+        )
+    )
+)
+

@@ -1,18 +1,11 @@
-GL1 Check Medium Total =
+GL1 Check High Attended =
 CALCULATE(
-    [GL1 Webinar Total by Persona],
-    TREATAS(
-        {"Medium"},
-        'Supplier Integration Register'[Comms Priority]
-    )
+    [GL1 Webinar Attended Corrected],
+    'GL1 Webinar Measures'[Comms Priority] = "High"
 )
 
-
-GL1 Check High Total =
+GL1 Check Medium Attended =
 CALCULATE(
-    [GL1 Webinar Total by Persona],
-    TREATAS(
-        {"High"},
-        'Supplier Integration Register'[Comms Priority]
-    )
+    [GL1 Webinar Attended Corrected],
+    'GL1 Webinar Measures'[Comms Priority] = "Medium"
 )

@@ -1,174 +1,256 @@
 
 {
   "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
-  "data": {"name": "dataset"},
-  "background": "transparent",
-  "spacing": 14,
+  "data": {
+    "name": "dataset"
+  },
   "transform": [
     {
-      "calculate": "datum['GL1 Webinar Attended'] == null ? 0 : datum['GL1 Webinar Attended']",
-      "as": "Attended"
+      "calculate": "isValid(datum['GL1 Webinar Attended']) ? +datum['GL1 Webinar Attended'] : 0",
+      "as": "Attended Count"
     },
     {
-      "calculate": "datum['GL1 Webinar Not Attended'] == null ? 0 : datum['GL1 Webinar Not Attended']",
-      "as": "Not Attended"
+      "calculate": "isValid(datum['GL1 Webinar Not Attended']) ? +datum['GL1 Webinar Not Attended'] : 0",
+      "as": "Not Attended Count"
     },
     {
-      "calculate": "datum['Suppliers in scope'] == null ? 0 : datum['Suppliers in scope']",
-      "as": "Total"
+      "calculate": "datum['Attended Count'] + datum['Not Attended Count']",
+      "as": "Calculated Total"
     },
     {
-      "calculate": "datum['Attendance Rate'] == null ? 0 : datum['Attendance Rate']",
-      "as": "Rate"
+      "calculate": "isValid(datum['Suppliers in scope']) ? +datum['Suppliers in scope'] : datum['Calculated Total']",
+      "as": "Supplier Total"
     },
     {
-      "calculate": "format(datum.Rate, '.0%')",
+      "calculate": "datum['Calculated Total'] > 0 ? format(datum['Attended Count'] / datum['Calculated Total'], '.0%') : '0%'",
       "as": "Rate Label"
-    },
-    {
-      "fold": ["Attended", "Not Attended"],
-      "as": ["Status", "Count"]
     }
   ],
+  "spacing": 5,
   "hconcat": [
     {
-      "width": 360,
-      "height": {"step": 34},
+      "width": 230,
+      "height": {
+        "step": 24
+      },
+      "transform": [
+        {
+          "fold": [
+            "Attended Count",
+            "Not Attended Count"
+          ],
+          "as": [
+            "Status",
+            "Count"
+          ]
+        },
+        {
+          "calculate": "datum.Status == 'Attended Count' ? 'Attended' : 'Not Attended'",
+          "as": "Attendance Status"
+        },
+        {
+          "calculate": "datum.Status == 'Attended Count' ? 0 : 1",
+          "as": "Sort Order"
+        },
+        {
+          "stack": "Count",
+          "groupby": [
+            "Category Family"
+          ],
+          "sort": [
+            {
+              "field": "Sort Order",
+              "order": "ascending"
+            }
+          ],
+          "as": [
+            "x0",
+            "x1"
+          ]
+        },
+        {
+          "calculate": "(datum.x0 + datum.x1) / 2",
+          "as": "Label Midpoint"
+        }
+      ],
+      "encoding": {
+        "y": {
+          "field": "Category Family",
+          "type": "nominal",
+          "sort": "ascending",
+          "axis": {
+            "title": null,
+            "labelFontSize": 10,
+            "labelLimit": 145,
+            "ticks": false,
+            "domain": false,
+            "labelPadding": 5
+          }
+        },
+        "x": {
+          "field": "x1",
+          "type": "quantitative",
+          "axis": null,
+          "scale": {
+            "zero": true
+          }
+        },
+        "tooltip": [
+          {
+            "field": "Category Family",
+            "type": "nominal"
+          },
+          {
+            "field": "Attendance Status",
+            "type": "nominal"
+          },
+          {
+            "field": "Count",
+            "type": "quantitative",
+            "format": ".0f"
+          }
+        ]
+      },
       "layer": [
         {
-          "mark": {"type": "bar", "height": 18},
+          "mark": {
+            "type": "bar",
+            "height": 16
+          },
           "encoding": {
-            "y": {
-              "field": "Category Family",
-              "type": "nominal",
-              "sort": null,
-              "axis": {
-                "title": null,
-                "labelFontSize": 11,
-                "labelLimit": 180,
-                "ticks": false,
-                "domain": false
-              }
-            },
-            "x": {
-              "field": "Count",
-              "type": "quantitative",
-              "stack": "zero",
-              "axis": null
+            "x2": {
+              "field": "x0"
             },
             "color": {
-              "field": "Status",
+              "field": "Attendance Status",
               "type": "nominal",
               "scale": {
-                "domain": ["Attended", "Not Attended"],
-                "range": ["#16A085", "#F28C45"]
+                "domain": [
+                  "Attended",
+                  "Not Attended"
+                ],
+                "range": [
+                  "#16A085",
+                  "#F28C45"
+                ]
               },
               "legend": {
-                "title": null,
                 "orient": "top",
-                "direction": "horizontal"
+                "title": null,
+                "labelFontSize": 10,
+                "symbolSize": 90,
+                "offset": 2
               }
-            },
-            "order": {
-              "field": "Status",
-              "sort": "ascending"
-            },
-            "tooltip": [
-              {"field": "Category Family"},
-              {"field": "Status"},
-              {"field": "Count", "format": ",.0f"}
-            ]
+            }
           }
         },
         {
           "mark": {
             "type": "text",
-            "fontSize": 10,
-            "color": "white"
+            "fontSize": 11,
+            "fontWeight": "bold",
+            "align": "center",
+            "baseline": "middle"
           },
           "encoding": {
-            "y": {
-              "field": "Category Family",
-              "type": "nominal",
-              "sort": null
-            },
             "x": {
+              "field": "Label Midpoint",
+              "type": "quantitative"
+            },
+            "text": {
               "field": "Count",
               "type": "quantitative",
-              "stack": "zero"
+              "format": ".0f"
             },
-            "detail": {"field": "Status"},
-            "text": {
+            "color": {
+              "value": "#FFFFFF"
+            },
+            "opacity": {
               "condition": {
                 "test": "datum.Count > 0",
-                "field": "Count",
-                "format": ".0f"
+                "value": 1
               },
-              "value": ""
-            },
-            "order": {
-              "field": "Status",
-              "sort": "ascending"
+              "value": 0
             }
           }
         }
       ]
     },
     {
-      "width": 85,
-      "height": {"step": 34},
-      "transform": [
-        {
-          "aggregate": [{"op": "max", "field": "Total", "as": "Total"}],
-          "groupby": ["Category Family"]
+      "width": 55,
+      "height": {
+        "step": 24
+      },
+      "mark": {
+        "type": "text",
+        "fontSize": 12,
+        "fontWeight": "bold",
+        "align": "center",
+        "baseline": "middle",
+        "color": "#17365D"
+      },
+      "encoding": {
+        "y": {
+          "field": "Category Family",
+          "type": "nominal",
+          "sort": "ascending",
+          "axis": null
+        },
+        "text": {
+          "field": "Supplier Total",
+          "type": "quantitative",
+          "format": ".0f"
         }
-      ],
+      },
       "title": {
         "text": "Total Suppliers",
         "fontSize": 11,
-        "color": "#315B85"
-      },
-      "mark": {"type": "text", "fontSize": 12},
-      "encoding": {
-        "y": {
-          "field": "Category Family",
-          "type": "nominal",
-          "sort": null,
-          "axis": null
-        },
-        "text": {"field": "Total", "format": ",.0f"}
+        "fontWeight": "bold",
+        "color": "#17365D"
       }
     },
     {
-      "width": 95,
-      "height": {"step": 34},
-      "transform": [
-        {
-          "aggregate": [{"op": "max", "field": "Rate", "as": "Rate"}],
-          "groupby": ["Category Family"]
-        }
-      ],
-      "title": {
-        "text": "Attendance Rate",
-        "fontSize": 11,
-        "color": "#315B85"
+      "width": 55,
+      "height": {
+        "step": 24
       },
-      "mark": {"type": "text", "fontSize": 12},
+      "mark": {
+        "type": "text",
+        "fontSize": 12,
+        "fontWeight": "bold",
+        "align": "center",
+        "baseline": "middle",
+        "color": "#17365D"
+      },
       "encoding": {
         "y": {
           "field": "Category Family",
           "type": "nominal",
-          "sort": null,
+          "sort": "ascending",
           "axis": null
         },
-        "text": {"field": "Rate", "format": ".0%"}
+        "text": {
+          "field": "Rate Label",
+          "type": "nominal"
+        }
+      },
+      "title": {
+        "text": "Attendance Rate",
+        "fontSize": 11,
+        "fontWeight": "bold",
+        "color": "#17365D"
       }
     }
   ],
-  "resolve": {"scale": {"y": "shared"}},
+  "resolve": {
+    "scale": {
+      "y": "shared"
+    }
+  },
   "config": {
-    "view": {"stroke": null},
-    "axis": {"grid": false},
-    "font": "Segoe UI"
+    "view": {
+      "stroke": null
+    },
+    "background": "transparent"
   }
 }

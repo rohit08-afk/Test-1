@@ -8,7 +8,7 @@
     "contains": "padding"
   },
   "padding": 0,
-  "width": 580,
+  "width": 1215,
   "height": 360,
   "signals": [
     {
@@ -98,34 +98,34 @@
     {
       "name": "columns",
       "values": [
-        {"x": 0, "x2": 125, "fill": "#FFFFFF"},
-        {"x": 125, "x2": 195, "fill": "#E5F2FF"},
-        {"x": 195, "x2": 270, "fill": "#E5F6EC"},
-        {"x": 270, "x2": 380, "fill": "#E5F6EC"},
-        {"x": 380, "x2": 445, "fill": "#FFF6DD"},
-        {"x": 445, "x2": 515, "fill": "#E9EEFA"},
-        {"x": 515, "x2": 580, "fill": "#E2F7F7"}
+        {"x": 0, "x2": 250, "fill": "#FFFFFF"},
+        {"x": 250, "x2": 385, "fill": "#E5F2FF"},
+        {"x": 385, "x2": 530, "fill": "#E5F6EC"},
+        {"x": 530, "x2": 760, "fill": "#E5F6EC"},
+        {"x": 760, "x2": 905, "fill": "#FFF6DD"},
+        {"x": 905, "x2": 1060, "fill": "#E9EEFA"},
+        {"x": 1060, "x2": 1215, "fill": "#E2F7F7"}
       ]
     },
     {
       "name": "stages",
       "values": [
-        {"x": 125, "x2": 195, "label": "S1 Reach", "fill": "#1555AB", "color": "#FFFFFF"},
-        {"x": 195, "x2": 380, "label": "S2 Acknowledge", "fill": "#07954B", "color": "#FFFFFF"},
-        {"x": 380, "x2": 445, "label": "S3 Commit", "fill": "#FFC21A", "color": "#17365D"},
-        {"x": 445, "x2": 515, "label": "S4 Prove", "fill": "#273F91", "color": "#FFFFFF"},
-        {"x": 515, "x2": 580, "label": "S5 Ready", "fill": "#08AFAF", "color": "#FFFFFF"}
+        {"x": 250, "x2": 385, "label": "S1 Reach", "fill": "#1555AB", "color": "#FFFFFF"},
+        {"x": 385, "x2": 760, "label": "S2 Acknowledge", "fill": "#07954B", "color": "#FFFFFF"},
+        {"x": 760, "x2": 905, "label": "S3 Commit", "fill": "#FFC21A", "color": "#17365D"},
+        {"x": 905, "x2": 1060, "label": "S4 Prove", "fill": "#273F91", "color": "#FFFFFF"},
+        {"x": 1060, "x2": 1215, "label": "S5 Ready", "fill": "#08AFAF", "color": "#FFFFFF"}
       ]
     },
     {
       "name": "subheaders",
       "values": [
-        {"x": 160, "label": "Email", "line2": "Coverage"},
-        {"x": 232.5, "label": "RO", "line2": "Attendance"},
-        {"x": 325, "label": "Supplier Webinar", "line2": "Attendance"},
-        {"x": 412.5, "label": "Commit", "line2": ""},
-        {"x": 480, "label": "Prove", "line2": "Capability"},
-        {"x": 547.5, "label": "Ready to", "line2": "Operate"}
+        {"x": 317.5, "label": "Email", "line2": "Coverage"},
+        {"x": 457.5, "label": "RO", "line2": "Attendance"},
+        {"x": 645, "label": "Supplier Webinar", "line2": "Attendance"},
+        {"x": 832.5, "label": "Commit", "line2": ""},
+        {"x": 982.5, "label": "Prove", "line2": "Capability"},
+        {"x": 1137.5, "label": "Ready to", "line2": "Operate"}
       ]
     },
     {
@@ -135,7 +135,7 @@
         {
           "type": "formula",
           "as": "Items",
-          "expr": "[{'x':160,'label':'100%','dot':'#20A56C'},{'x':232.5,'label':'—','dot':'#BFC3C8'},{'x':325,'label':datum.SupplierLabel,'dot':datum.Rate == null ? '#BFC3C8' : datum.Rate == 0 ? '#FF5757' : '#FFBF3C'},{'x':412.5,'label':'—','dot':'#BFC3C8'},{'x':480,'label':'—','dot':'#BFC3C8'},{'x':547.5,'label':'—','dot':'#BFC3C8'}]"
+          "expr": "[{'x':317.5,'label':'100%','dot':'#20A56C'},{'x':457.5,'label':'—','dot':'#BFC3C8'},{'x':645,'label':datum.SupplierLabel,'dot':datum.Rate == null ? '#BFC3C8' : datum.Rate == 0 ? '#FF5757' : '#FFBF3C'},{'x':832.5,'label':'—','dot':'#BFC3C8'},{'x':982.5,'label':'—','dot':'#BFC3C8'},{'x':1137.5,'label':'—','dot':'#BFC3C8'}]"
         },
         {
           "type": "flatten",
@@ -199,7 +199,7 @@
           "align": {"value": "center"},
           "baseline": {"value": "middle"},
           "font": {"value": "Segoe UI"},
-          "fontSize": {"value": 9},
+          "fontSize": {"value": 10},
           "fontWeight": {"value": "bold"},
           "fill": {"field": "color"}
         }
@@ -212,7 +212,7 @@
           "x": {"value": 4},
           "y": {"value": 55},
           "text": {"value": "Category Family"},
-          "fontSize": {"value": 9},
+          "fontSize": {"value": 10},
           "fontWeight": {"value": "bold"},
           "fill": {"value": "#17365D"}
         }
@@ -227,7 +227,7 @@
           "y": {"value": 49},
           "text": {"field": "label"},
           "align": {"value": "center"},
-          "fontSize": {"value": 9},
+          "fontSize": {"value": 10},
           "fontWeight": {"value": "bold"},
           "fill": {"value": "#17365D"}
         }
@@ -242,7 +242,7 @@
           "y": {"value": 62},
           "text": {"field": "line2"},
           "align": {"value": "center"},
-          "fontSize": {"value": 9},
+          "fontSize": {"value": 10},
           "fill": {"value": "#17365D"}
         }
       }
@@ -256,9 +256,9 @@
           "y": {"field": "cy"},
           "text": {"field": "Category"},
           "baseline": {"value": "middle"},
-          "fontSize": {"value": 8},
+          "fontSize": {"value": 9},
           "fill": {"value": "#17365D"},
-          "limit": {"value": 117}
+          "limit": {"value": 240}
         }
       }
     },
@@ -284,7 +284,7 @@
           "text": {"field": "label"},
           "align": {"value": "center"},
           "baseline": {"value": "middle"},
-          "fontSize": {"value": 8},
+          "fontSize": {"value": 9},
           "fill": {"value": "#17365D"}
         }
       }
@@ -294,7 +294,7 @@
       "encode": {
         "enter": {
           "x": {"value": 0},
-          "x2": {"value": 580},
+          "x2": {"value": 1215},
           "y": {"signal": "totalY - 12"},
           "stroke": {"value": "#CCD5DF"}
         }
@@ -308,7 +308,7 @@
           "y": {"signal": "totalY"},
           "text": {"value": "Total"},
           "baseline": {"value": "middle"},
-          "fontSize": {"value": 9},
+          "fontSize": {"value": 10},
           "fontWeight": {"value": "bold"},
           "fill": {"value": "#17365D"}
         }
@@ -318,12 +318,12 @@
       "type": "text",
       "encode": {
         "enter": {
-          "x": {"value": 160},
+          "x": {"value": 317.5},
           "y": {"signal": "totalY"},
           "text": {"value": "100%"},
           "align": {"value": "center"},
           "baseline": {"value": "middle"},
-          "fontSize": {"value": 9},
+          "fontSize": {"value": 10},
           "fontWeight": {"value": "bold"},
           "fill": {"value": "#17365D"}
         }
@@ -334,12 +334,12 @@
       "from": {"data": "total"},
       "encode": {
         "enter": {
-          "x": {"value": 325},
+          "x": {"value": 645},
           "y": {"signal": "totalY"},
           "text": {"field": "Label"},
           "align": {"value": "center"},
           "baseline": {"value": "middle"},
-          "fontSize": {"value": 9},
+          "fontSize": {"value": 10},
           "fontWeight": {"value": "bold"},
           "fill": {"value": "#17365D"}
         }

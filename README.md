@@ -1,6 +1,6 @@
 {
   "$schema": "https://vega.github.io/schema/vega/v5.json",
-  "description": "Supplier readiness matrix - merged S2, shared coordinates, dynamic category rows",
+  "description": "Supplier readiness by category family - corrected formatted Vega specification",
   "background": "transparent",
   "autosize": {
     "type": "pad",

@@ -1,260 +1,260 @@
 
+Overall Attendance Rate =
+CALCULATE(
+    [Attendance Rate],
+    REMOVEFILTERS('GL1 Webinar Measures'[Category Family])
+)
+
+
+
 {
   "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
-  "data": {
-    "name": "dataset"
-  },
+  "data": {"name": "dataset"},
   "background": "transparent",
-  "spacing": 8,
+  "spacing": 2,
   "transform": [
     {
-      "calculate": "isValid(datum['Webinar Attended']) ? +datum['Webinar Attended'] : 0",
-      "as": "Attended Count"
+      "calculate": "datum['Category Family']",
+      "as": "Category"
     },
     {
-      "calculate": "isValid(datum['Webinar Not Attended']) ? +datum['Webinar Not Attended'] : 0",
-      "as": "Not Attended Count"
+      "calculate": "isValid(datum['Attendance Rate']) ? datum['Attendance Rate'] : 0",
+      "as": "Supplier Rate"
     },
     {
-      "calculate": "datum['Attended Count'] + datum['Not Attended Count']",
-      "as": "Calculated Total"
-    },
-    {
-      "calculate": "isValid(datum['Suppliers in scope']) ? +datum['Suppliers in scope'] : datum['Calculated Total']",
-      "as": "Supplier Total"
-    },
-    {
-      "calculate": "datum['Calculated Total'] > 0 ? format(datum['Attended Count'] / datum['Calculated Total'], '.0%') : '0%'",
-      "as": "Rate Label"
+      "calculate": "isValid(datum['Overall Attendance Rate']) ? datum['Overall Attendance Rate'] : 0",
+      "as": "Overall Rate"
     }
   ],
-  "hconcat": [
+  "vconcat": [
     {
-      "width": 330,
-      "height": {
-        "step": 13
-      },
-      "transform": [
-        {
-          "fold": [
-            "Attended Count",
-            "Not Attended Count"
-          ],
-          "as": [
-            "Status",
-            "Count"
-          ]
-        },
-        {
-          "calculate": "datum.Status == 'Attended Count' ? 'Attended' : 'Not Attended'",
-          "as": "Attendance Status"
-        },
-        {
-          "calculate": "datum.Status == 'Attended Count' ? 0 : 1",
-          "as": "Sort Order"
-        },
-        {
-          "stack": "Count",
-          "groupby": [
-            "Category Family"
-          ],
-          "sort": [
-            {
-              "field": "Sort Order",
-              "order": "ascending"
-            }
-          ],
-          "as": [
-            "x0",
-            "x1"
-          ]
-        },
-        {
-          "calculate": "(datum.x0 + datum.x1) / 2",
-          "as": "Label Midpoint"
-        }
-      ],
-      "encoding": {
-        "y": {
-          "field": "Category Family",
-          "type": "nominal",
-          "sort": "ascending",
-          "axis": {
-            "title": null,
-            "labelFontSize": 8,
-            "labelLimit": 155,
-            "ticks": false,
-            "domain": false,
-            "labelPadding": 3
-          }
-        },
-        "x": {
-          "field": "x1",
-          "type": "quantitative",
-          "axis": null,
-          "scale": {
-            "zero": true
-          }
-        },
-        "tooltip": [
-          {
-            "field": "Category Family",
-            "type": "nominal"
-          },
-          {
-            "field": "Attendance Status",
-            "type": "nominal"
-          },
-          {
-            "field": "Count",
-            "type": "quantitative",
-            "format": ".0f"
-          }
+      "width": {"step": 75},
+      "height": 30,
+      "data": {
+        "values": [
+          {"Stage": "Reach", "Order": 1, "Heading": "S1 Reach", "Color": "#1555A3"},
+          {"Stage": "RO Readiness", "Order": 2, "Heading": "S2 RO", "Color": "#07954B"},
+          {"Stage": "Supplier", "Order": 3, "Heading": "S2 Supplier", "Color": "#07954B"},
+          {"Stage": "Commit", "Order": 4, "Heading": "S3 Commit", "Color": "#FFC21A"},
+          {"Stage": "Prove", "Order": 5, "Heading": "S4 Prove", "Color": "#273F91"},
+          {"Stage": "Ready", "Order": 6, "Heading": "S5 Ready", "Color": "#08AFB2"}
         ]
+      },
+      "encoding": {
+        "x": {
+          "field": "Stage",
+          "type": "ordinal",
+          "sort": ["Reach", "RO Readiness", "Supplier", "Commit", "Prove", "Ready"],
+          "axis": null
+        }
       },
       "layer": [
         {
-          "mark": {
-            "type": "bar",
-            "height": 8
-          },
+          "mark": {"type": "rect", "cornerRadius": 3},
           "encoding": {
-            "x2": {
-              "field": "x0"
-            },
             "color": {
-              "field": "Attendance Status",
+              "field": "Color",
               "type": "nominal",
-              "scale": {
-                "domain": [
-                  "Attended",
-                  "Not Attended"
-                ],
-                "range": [
-                  "#16A085",
-                  "#F28C45"
-                ]
-              },
-              "legend": {
-                "orient": "top",
-                "title": null,
-                "labelFontSize": 8,
-                "symbolSize": 50,
-                "offset": 2
-              }
+              "scale": null,
+              "legend": null
             }
           }
         },
         {
           "mark": {
             "type": "text",
-            "fontSize": 7,
-            "fontWeight": "normal",
-            "align": "center",
-            "baseline": "middle"
+            "fontSize": 9,
+            "fontWeight": "bold",
+            "color": "white"
           },
           "encoding": {
-            "x": {
-              "field": "Label Midpoint",
-              "type": "quantitative"
-            },
-            "text": {
-              "field": "Count",
-              "type": "quantitative",
-              "format": ".0f"
-            },
-            "color": {
-              "value": "#000000"
-            },
-            "opacity": {
-              "condition": {
-                "test": "datum.Count > 0 && (datum.x1 - datum.x0) >= 8",
-                "value": 1
-              },
-              "value": 0
-            }
+            "text": {"field": "Heading"}
           }
         }
       ]
     },
     {
-      "width": 75,
-      "height": {
-        "step": 13
-      },
-      "mark": {
-        "type": "text",
-        "fontSize": 9,
-        "fontWeight": "normal",
-        "align": "center",
-        "baseline": "middle",
-        "color": "#17365D"
-      },
+      "width": {"step": 75},
+      "height": {"step": 16},
+      "transform": [
+        {"calculate": "'100%'", "as": "Reach"},
+        {"calculate": "'-'", "as": "RO Readiness"},
+        {
+          "calculate": "format(datum['Supplier Rate'], '.0%')",
+          "as": "Supplier"
+        },
+        {"calculate": "'-'", "as": "Commit"},
+        {"calculate": "'-'", "as": "Prove"},
+        {"calculate": "'-'", "as": "Ready"},
+        {
+          "fold": ["Reach", "RO Readiness", "Supplier", "Commit", "Prove", "Ready"],
+          "as": ["Stage", "Value"]
+        },
+        {
+          "calculate": "datum.Stage == 'Reach' ? '#E5F2FF' : datum.Stage == 'RO Readiness' || datum.Stage == 'Supplier' ? '#E5F6EC' : datum.Stage == 'Commit' ? '#FFF6DD' : datum.Stage == 'Prove' ? '#E9EEFA' : '#E2F7F7'",
+          "as": "Cell Color"
+        },
+        {
+          "calculate": "datum.Stage == 'Reach' ? '#20A56C' : datum.Stage == 'Supplier' ? '#F05252' : '#BFC3C8'",
+          "as": "Dot Color"
+        }
+      ],
       "encoding": {
-        "y": {
-          "field": "Category Family",
-          "type": "nominal",
-          "sort": "ascending",
+        "x": {
+          "field": "Stage",
+          "type": "ordinal",
+          "sort": ["Reach", "RO Readiness", "Supplier", "Commit", "Prove", "Ready"],
           "axis": null
         },
-        "text": {
-          "field": "Supplier Total",
-          "type": "quantitative",
-          "format": ".0f"
+        "y": {
+          "field": "Category",
+          "type": "nominal",
+          "sort": "ascending",
+          "axis": {
+            "title": null,
+            "labelFontSize": 8,
+            "labelLimit": 165,
+            "labelPadding": 4,
+            "ticks": false,
+            "domain": false
+          }
         }
       },
-      "title": {
-        "text": "Total Suppliers",
-        "fontSize": 9,
-        "fontWeight": "bold",
-        "color": "#17365D"
-      }
+      "layer": [
+        {
+          "mark": {
+            "type": "rect",
+            "stroke": "#DDE4EC",
+            "strokeWidth": 0.4
+          },
+          "encoding": {
+            "color": {
+              "field": "Cell Color",
+              "type": "nominal",
+              "scale": null,
+              "legend": null
+            }
+          }
+        },
+        {
+          "mark": {
+            "type": "circle",
+            "size": 35,
+            "xOffset": -19
+          },
+          "encoding": {
+            "color": {
+              "field": "Dot Color",
+              "type": "nominal",
+              "scale": null,
+              "legend": null
+            }
+          }
+        },
+        {
+          "mark": {
+            "type": "text",
+            "fontSize": 8,
+            "fontWeight": "normal",
+            "color": "#17365D",
+            "xOffset": 7
+          },
+          "encoding": {
+            "text": {"field": "Value"}
+          }
+        }
+      ]
     },
     {
-      "width": 90,
-      "height": {
-        "step": 13
-      },
-      "mark": {
-        "type": "text",
-        "fontSize": 9,
-        "fontWeight": "normal",
-        "align": "center",
-        "baseline": "middle",
-        "color": "#17365D"
-      },
-      "encoding": {
-        "y": {
-          "field": "Category Family",
-          "type": "nominal",
-          "sort": "ascending",
-          "axis": null
+      "width": {"step": 75},
+      "height": 19,
+      "transform": [
+        {
+          "aggregate": [
+            {"op": "max", "field": "Overall Rate", "as": "Overall Rate"}
+          ]
         },
-        "text": {
-          "field": "Rate Label",
-          "type": "nominal"
+        {"calculate": "'100%'", "as": "Reach"},
+        {"calculate": "'-'", "as": "RO Readiness"},
+        {
+          "calculate": "format(datum['Overall Rate'], '.0%')",
+          "as": "Supplier"
+        },
+        {"calculate": "'-'", "as": "Commit"},
+        {"calculate": "'-'", "as": "Prove"},
+        {"calculate": "'-'", "as": "Ready"},
+        {
+          "fold": ["Reach", "RO Readiness", "Supplier", "Commit", "Prove", "Ready"],
+          "as": ["Stage", "Value"]
+        },
+        {
+          "calculate": "datum.Stage == 'Reach' ? '#E5F2FF' : datum.Stage == 'RO Readiness' || datum.Stage == 'Supplier' ? '#E5F6EC' : datum.Stage == 'Commit' ? '#FFF6DD' : datum.Stage == 'Prove' ? '#E9EEFA' : '#E2F7F7'",
+          "as": "Cell Color"
+        },
+        {
+          "calculate": "datum.Stage == 'Reach' ? '#20A56C' : datum.Stage == 'Supplier' ? '#F05252' : '#BFC3C8'",
+          "as": "Dot Color"
+        }
+      ],
+      "encoding": {
+        "x": {
+          "field": "Stage",
+          "type": "ordinal",
+          "sort": ["Reach", "RO Readiness", "Supplier", "Commit", "Prove", "Ready"],
+          "axis": null
         }
       },
-      "title": {
-        "text": "Attendance Rate",
-        "fontSize": 9,
-        "fontWeight": "bold",
-        "color": "#17365D"
-      }
+      "layer": [
+        {
+          "mark": {
+            "type": "rect",
+            "stroke": "#DDE4EC",
+            "strokeWidth": 0.5
+          },
+          "encoding": {
+            "color": {
+              "field": "Cell Color",
+              "type": "nominal",
+              "scale": null,
+              "legend": null
+            }
+          }
+        },
+        {
+          "mark": {
+            "type": "circle",
+            "size": 35,
+            "xOffset": -19
+          },
+          "encoding": {
+            "color": {
+              "field": "Dot Color",
+              "type": "nominal",
+              "scale": null,
+              "legend": null
+            }
+          }
+        },
+        {
+          "mark": {
+            "type": "text",
+            "fontSize": 9,
+            "fontWeight": "bold",
+            "color": "#17365D",
+            "xOffset": 7
+          },
+          "encoding": {
+            "text": {"field": "Value"}
+          }
+        }
+      ]
     }
   ],
   "resolve": {
-    "scale": {
-      "y": "shared"
-    }
+    "scale": {"x": "shared"}
   },
   "config": {
-    "view": {
-      "stroke": null
-    },
-    "axis": {
-      "grid": false
-    },
+    "view": {"stroke": null},
     "font": "Segoe UI"
   }
 }

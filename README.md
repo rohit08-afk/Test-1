@@ -1,57 +1,58 @@
 
-Overall Attendance Rate =
-CALCULATE(
-    [Attendance Rate],
-    REMOVEFILTERS('GL1 Webinar Measures'[Category Family])
-)
-
-
-
 {
   "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
-  "data": {"name": "dataset"},
+  "description": "Supplier Readiness by Category Family",
+  "data": {
+    "name": "dataset"
+  },
   "background": "transparent",
-  "spacing": 2,
+  "autosize": {
+    "type": "pad",
+    "contains": "padding"
+  },
+  "padding": 0,
+  "spacing": 0,
   "transform": [
     {
       "calculate": "datum['Category Family']",
       "as": "Category"
     },
     {
-      "calculate": "isValid(datum['Attendance Rate']) ? datum['Attendance Rate'] : 0",
+      "calculate": "isValid(datum['Attendance Rate']) ? toNumber(datum['Attendance Rate']) : null",
       "as": "Supplier Rate"
     },
     {
-      "calculate": "isValid(datum['Overall Attendance Rate']) ? datum['Overall Attendance Rate'] : 0",
+      "calculate": "isValid(datum['Overall Attendance Rate']) ? toNumber(datum['Overall Attendance Rate']) : null",
       "as": "Overall Rate"
     }
   ],
   "vconcat": [
     {
-      "width": {"step": 75},
-      "height": 30,
+      "width": 650,
+      "height": 28,
       "data": {
         "values": [
-          {"Stage": "Reach", "Order": 1, "Heading": "S1 Reach", "Color": "#1555A3"},
-          {"Stage": "RO Readiness", "Order": 2, "Heading": "S2 RO", "Color": "#07954B"},
-          {"Stage": "Supplier", "Order": 3, "Heading": "S2 Supplier", "Color": "#07954B"},
-          {"Stage": "Commit", "Order": 4, "Heading": "S3 Commit", "Color": "#FFC21A"},
-          {"Stage": "Prove", "Order": 5, "Heading": "S4 Prove", "Color": "#273F91"},
-          {"Stage": "Ready", "Order": 6, "Heading": "S5 Ready", "Color": "#08AFB2"}
+          {"Stage": "S1 Reach", "x0": 170, "x1": 250, "Color": "#1555A3"},
+          {"Stage": "S2 Acknowledge", "x0": 250, "x1": 410, "Color": "#07954B"},
+          {"Stage": "S3 Commit", "x0": 410, "x1": 490, "Color": "#FFC21A"},
+          {"Stage": "S4 Prove Capability", "x0": 490, "x1": 570, "Color": "#273F91"},
+          {"Stage": "S5 Ready to Operate", "x0": 570, "x1": 650, "Color": "#08AFB2"}
         ]
-      },
-      "encoding": {
-        "x": {
-          "field": "Stage",
-          "type": "ordinal",
-          "sort": ["Reach", "RO Readiness", "Supplier", "Commit", "Prove", "Ready"],
-          "axis": null
-        }
       },
       "layer": [
         {
-          "mark": {"type": "rect", "cornerRadius": 3},
+          "mark": {
+            "type": "rect",
+            "cornerRadius": 3
+          },
           "encoding": {
+            "x": {
+              "field": "x0",
+              "type": "quantitative",
+              "scale": {"domain": [0, 650]},
+              "axis": null
+            },
+            "x2": {"field": "x1"},
             "color": {
               "field": "Color",
               "type": "nominal",
@@ -61,53 +62,155 @@ CALCULATE(
           }
         },
         {
+          "transform": [
+            {
+              "calculate": "(datum.x0 + datum.x1) / 2",
+              "as": "Center"
+            }
+          ],
           "mark": {
             "type": "text",
             "fontSize": 9,
             "fontWeight": "bold",
-            "color": "white"
+            "align": "center",
+            "baseline": "middle"
           },
           "encoding": {
-            "text": {"field": "Heading"}
+            "x": {
+              "field": "Center",
+              "type": "quantitative",
+              "scale": {"domain": [0, 650]},
+              "axis": null
+            },
+            "text": {"field": "Stage"},
+            "color": {
+              "condition": {
+                "test": "datum.Stage == 'S3 Commit'",
+                "value": "#17365D"
+              },
+              "value": "#FFFFFF"
+            }
           }
         }
       ]
     },
     {
-      "width": {"step": 75},
+      "width": 650,
+      "height": 32,
+      "data": {
+        "values": [
+          {"Label": "Category Family", "x0": 0, "x1": 170, "Color": "#F5F7FA"},
+          {"Label": "Email Coverage", "x0": 170, "x1": 250, "Color": "#E5F2FF"},
+          {"Label": "RO Attendance", "x0": 250, "x1": 330, "Color": "#E5F6EC"},
+          {"Label": "Supplier Webinar Attendance", "x0": 330, "x1": 410, "Color": "#E5F6EC"},
+          {"Label": "Commit", "x0": 410, "x1": 490, "Color": "#FFF6DD"},
+          {"Label": "Prove Capability", "x0": 490, "x1": 570, "Color": "#E9EEFA"},
+          {"Label": "Ready to Operate", "x0": 570, "x1": 650, "Color": "#E2F7F7"}
+        ]
+      },
+      "layer": [
+        {
+          "mark": {
+            "type": "rect",
+            "stroke": "#DDE4EC",
+            "strokeWidth": 0.5
+          },
+          "encoding": {
+            "x": {
+              "field": "x0",
+              "type": "quantitative",
+              "scale": {"domain": [0, 650]},
+              "axis": null
+            },
+            "x2": {"field": "x1"},
+            "color": {
+              "field": "Color",
+              "type": "nominal",
+              "scale": null,
+              "legend": null
+            }
+          }
+        },
+        {
+          "transform": [
+            {
+              "calculate": "(datum.x0 + datum.x1) / 2",
+              "as": "Center"
+            }
+          ],
+          "mark": {
+            "type": "text",
+            "fontSize": 8,
+            "fontWeight": "bold",
+            "align": "center",
+            "baseline": "middle",
+            "color": "#17365D"
+          },
+          "encoding": {
+            "x": {
+              "field": "Center",
+              "type": "quantitative",
+              "scale": {"domain": [0, 650]},
+              "axis": null
+            },
+            "text": {"field": "Label"}
+          }
+        }
+      ]
+    },
+    {
+      "width": 650,
       "height": {"step": 16},
       "transform": [
-        {"calculate": "'100%'", "as": "Reach"},
-        {"calculate": "'-'", "as": "RO Readiness"},
         {
-          "calculate": "format(datum['Supplier Rate'], '.0%')",
-          "as": "Supplier"
+          "calculate": "datum.Category",
+          "as": "Row Category"
         },
-        {"calculate": "'-'", "as": "Commit"},
-        {"calculate": "'-'", "as": "Prove"},
-        {"calculate": "'-'", "as": "Ready"},
         {
-          "fold": ["Reach", "RO Readiness", "Supplier", "Commit", "Prove", "Ready"],
+          "calculate": "datum['Supplier Rate'] == null ? '—' : format(datum['Supplier Rate'], '.0%')",
+          "as": "Supplier Label"
+        },
+        {
+          "calculate": "'100%'",
+          "as": "Reach Label"
+        },
+        {
+          "fold": [
+            "Reach Label",
+            "RO",
+            "Supplier Label",
+            "Commit",
+            "Prove",
+            "Ready"
+          ],
           "as": ["Stage", "Value"]
         },
         {
-          "calculate": "datum.Stage == 'Reach' ? '#E5F2FF' : datum.Stage == 'RO Readiness' || datum.Stage == 'Supplier' ? '#E5F6EC' : datum.Stage == 'Commit' ? '#FFF6DD' : datum.Stage == 'Prove' ? '#E9EEFA' : '#E2F7F7'",
+          "calculate": "datum.Stage == 'Reach Label' ? 1 : datum.Stage == 'RO' ? 2 : datum.Stage == 'Supplier Label' ? 3 : datum.Stage == 'Commit' ? 4 : datum.Stage == 'Prove' ? 5 : 6",
+          "as": "Stage Order"
+        },
+        {
+          "calculate": "datum.Stage == 'Reach Label' ? '#E5F2FF' : datum.Stage == 'RO' || datum.Stage == 'Supplier Label' ? '#E5F6EC' : datum.Stage == 'Commit' ? '#FFF6DD' : datum.Stage == 'Prove' ? '#E9EEFA' : '#E2F7F7'",
           "as": "Cell Color"
         },
         {
-          "calculate": "datum.Stage == 'Reach' ? '#20A56C' : datum.Stage == 'Supplier' ? '#F05252' : '#BFC3C8'",
+          "calculate": "datum.Stage == 'Reach Label' ? '#20A56C' : datum.Stage == 'Supplier Label' ? '#FFBF3C' : '#BFC3C8'",
           "as": "Dot Color"
+        },
+        {
+          "calculate": "datum.Stage == 'Reach Label' ? '100%' : datum.Stage == 'Supplier Label' ? datum['Supplier Label'] : '—'",
+          "as": "Display Value"
         }
       ],
       "encoding": {
         "x": {
-          "field": "Stage",
+          "field": "Stage Order",
           "type": "ordinal",
-          "sort": ["Reach", "RO Readiness", "Supplier", "Commit", "Prove", "Ready"],
+          "sort": "ascending",
           "axis": null
         },
         "y": {
-          "field": "Category",
+          "field": "Row Category",
           "type": "nominal",
           "sort": "ascending",
           "axis": {
@@ -140,7 +243,7 @@ CALCULATE(
           "mark": {
             "type": "circle",
             "size": 35,
-            "xOffset": -19
+            "xOffset": -18
           },
           "encoding": {
             "color": {
@@ -157,50 +260,70 @@ CALCULATE(
             "fontSize": 8,
             "fontWeight": "normal",
             "color": "#17365D",
-            "xOffset": 7
+            "xOffset": 9
           },
           "encoding": {
-            "text": {"field": "Value"}
+            "text": {
+              "field": "Display Value"
+            }
           }
         }
       ]
     },
     {
-      "width": {"step": 75},
-      "height": 19,
+      "width": 650,
+      "height": 20,
       "transform": [
         {
           "aggregate": [
-            {"op": "max", "field": "Overall Rate", "as": "Overall Rate"}
+            {
+              "op": "max",
+              "field": "Overall Rate",
+              "as": "Overall Rate"
+            }
           ]
         },
-        {"calculate": "'100%'", "as": "Reach"},
-        {"calculate": "'-'", "as": "RO Readiness"},
         {
-          "calculate": "format(datum['Overall Rate'], '.0%')",
-          "as": "Supplier"
+          "calculate": "datum['Overall Rate'] == null ? '—' : format(datum['Overall Rate'], '.0%')",
+          "as": "Total Supplier Label"
         },
-        {"calculate": "'-'", "as": "Commit"},
-        {"calculate": "'-'", "as": "Prove"},
-        {"calculate": "'-'", "as": "Ready"},
         {
-          "fold": ["Reach", "RO Readiness", "Supplier", "Commit", "Prove", "Ready"],
+          "calculate": "'100%'",
+          "as": "Reach Label"
+        },
+        {
+          "fold": [
+            "Reach Label",
+            "RO",
+            "Total Supplier Label",
+            "Commit",
+            "Prove",
+            "Ready"
+          ],
           "as": ["Stage", "Value"]
         },
         {
-          "calculate": "datum.Stage == 'Reach' ? '#E5F2FF' : datum.Stage == 'RO Readiness' || datum.Stage == 'Supplier' ? '#E5F6EC' : datum.Stage == 'Commit' ? '#FFF6DD' : datum.Stage == 'Prove' ? '#E9EEFA' : '#E2F7F7'",
+          "calculate": "datum.Stage == 'Reach Label' ? 1 : datum.Stage == 'RO' ? 2 : datum.Stage == 'Total Supplier Label' ? 3 : datum.Stage == 'Commit' ? 4 : datum.Stage == 'Prove' ? 5 : 6",
+          "as": "Stage Order"
+        },
+        {
+          "calculate": "datum.Stage == 'Reach Label' ? '#E5F2FF' : datum.Stage == 'RO' || datum.Stage == 'Total Supplier Label' ? '#E5F6EC' : datum.Stage == 'Commit' ? '#FFF6DD' : datum.Stage == 'Prove' ? '#E9EEFA' : '#E2F7F7'",
           "as": "Cell Color"
         },
         {
-          "calculate": "datum.Stage == 'Reach' ? '#20A56C' : datum.Stage == 'Supplier' ? '#F05252' : '#BFC3C8'",
+          "calculate": "datum.Stage == 'Reach Label' ? '#20A56C' : datum.Stage == 'Total Supplier Label' ? '#FFBF3C' : '#BFC3C8'",
           "as": "Dot Color"
+        },
+        {
+          "calculate": "datum.Stage == 'Reach Label' ? '100%' : datum.Stage == 'Total Supplier Label' ? datum['Total Supplier Label'] : '—'",
+          "as": "Display Value"
         }
       ],
       "encoding": {
         "x": {
-          "field": "Stage",
+          "field": "Stage Order",
           "type": "ordinal",
-          "sort": ["Reach", "RO Readiness", "Supplier", "Commit", "Prove", "Ready"],
+          "sort": "ascending",
           "axis": null
         }
       },
@@ -224,7 +347,7 @@ CALCULATE(
           "mark": {
             "type": "circle",
             "size": 35,
-            "xOffset": -19
+            "xOffset": -18
           },
           "encoding": {
             "color": {
@@ -241,20 +364,26 @@ CALCULATE(
             "fontSize": 9,
             "fontWeight": "bold",
             "color": "#17365D",
-            "xOffset": 7
+            "xOffset": 9
           },
           "encoding": {
-            "text": {"field": "Value"}
+            "text": {
+              "field": "Display Value"
+            }
           }
         }
       ]
     }
   ],
   "resolve": {
-    "scale": {"x": "shared"}
+    "scale": {
+      "x": "independent"
+    }
   },
   "config": {
-    "view": {"stroke": null},
+    "view": {
+      "stroke": null
+    },
     "font": "Segoe UI"
   }
 }

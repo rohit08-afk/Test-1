@@ -1,389 +1,843 @@
-
 {
-  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
-  "description": "Supplier Readiness by Category Family",
-  "data": {
-    "name": "dataset"
-  },
+  "$schema": "https://vega.github.io/schema/vega/v5.json",
+  "description": "Supplier readiness matrix - merged S2, shared coordinates, dynamic category rows",
   "background": "transparent",
   "autosize": {
     "type": "pad",
     "contains": "padding"
   },
   "padding": 0,
-  "spacing": 0,
-  "transform": [
+  "width": 700,
+  "height": {
+    "signal": "max(90, 62 + length(data(\"rows\"))*19 + 22)"
+  },
+  "data": [
     {
-      "calculate": "datum['Category Family']",
-      "as": "Category"
+      "name": "dataset"
     },
     {
-      "calculate": "isValid(datum['Attendance Rate']) ? toNumber(datum['Attendance Rate']) : null",
-      "as": "Supplier Rate"
-    },
-    {
-      "calculate": "isValid(datum['Overall Attendance Rate']) ? toNumber(datum['Overall Attendance Rate']) : null",
-      "as": "Overall Rate"
-    }
-  ],
-  "vconcat": [
-    {
-      "width": 650,
-      "height": 28,
-      "data": {
-        "values": [
-          {"Stage": "S1 Reach", "x0": 170, "x1": 250, "Color": "#1555A3"},
-          {"Stage": "S2 Acknowledge", "x0": 250, "x1": 410, "Color": "#07954B"},
-          {"Stage": "S3 Commit", "x0": 410, "x1": 490, "Color": "#FFC21A"},
-          {"Stage": "S4 Prove Capability", "x0": 490, "x1": 570, "Color": "#273F91"},
-          {"Stage": "S5 Ready to Operate", "x0": 570, "x1": 650, "Color": "#08AFB2"}
-        ]
-      },
-      "layer": [
-        {
-          "mark": {
-            "type": "rect",
-            "cornerRadius": 3
-          },
-          "encoding": {
-            "x": {
-              "field": "x0",
-              "type": "quantitative",
-              "scale": {"domain": [0, 650]},
-              "axis": null
-            },
-            "x2": {"field": "x1"},
-            "color": {
-              "field": "Color",
-              "type": "nominal",
-              "scale": null,
-              "legend": null
-            }
-          }
-        },
-        {
-          "transform": [
-            {
-              "calculate": "(datum.x0 + datum.x1) / 2",
-              "as": "Center"
-            }
-          ],
-          "mark": {
-            "type": "text",
-            "fontSize": 9,
-            "fontWeight": "bold",
-            "align": "center",
-            "baseline": "middle"
-          },
-          "encoding": {
-            "x": {
-              "field": "Center",
-              "type": "quantitative",
-              "scale": {"domain": [0, 650]},
-              "axis": null
-            },
-            "text": {"field": "Stage"},
-            "color": {
-              "condition": {
-                "test": "datum.Stage == 'S3 Commit'",
-                "value": "#17365D"
-              },
-              "value": "#FFFFFF"
-            }
-          }
-        }
-      ]
-    },
-    {
-      "width": 650,
-      "height": 32,
-      "data": {
-        "values": [
-          {"Label": "Category Family", "x0": 0, "x1": 170, "Color": "#F5F7FA"},
-          {"Label": "Email Coverage", "x0": 170, "x1": 250, "Color": "#E5F2FF"},
-          {"Label": "RO Attendance", "x0": 250, "x1": 330, "Color": "#E5F6EC"},
-          {"Label": "Supplier Webinar Attendance", "x0": 330, "x1": 410, "Color": "#E5F6EC"},
-          {"Label": "Commit", "x0": 410, "x1": 490, "Color": "#FFF6DD"},
-          {"Label": "Prove Capability", "x0": 490, "x1": 570, "Color": "#E9EEFA"},
-          {"Label": "Ready to Operate", "x0": 570, "x1": 650, "Color": "#E2F7F7"}
-        ]
-      },
-      "layer": [
-        {
-          "mark": {
-            "type": "rect",
-            "stroke": "#DDE4EC",
-            "strokeWidth": 0.5
-          },
-          "encoding": {
-            "x": {
-              "field": "x0",
-              "type": "quantitative",
-              "scale": {"domain": [0, 650]},
-              "axis": null
-            },
-            "x2": {"field": "x1"},
-            "color": {
-              "field": "Color",
-              "type": "nominal",
-              "scale": null,
-              "legend": null
-            }
-          }
-        },
-        {
-          "transform": [
-            {
-              "calculate": "(datum.x0 + datum.x1) / 2",
-              "as": "Center"
-            }
-          ],
-          "mark": {
-            "type": "text",
-            "fontSize": 8,
-            "fontWeight": "bold",
-            "align": "center",
-            "baseline": "middle",
-            "color": "#17365D"
-          },
-          "encoding": {
-            "x": {
-              "field": "Center",
-              "type": "quantitative",
-              "scale": {"domain": [0, 650]},
-              "axis": null
-            },
-            "text": {"field": "Label"}
-          }
-        }
-      ]
-    },
-    {
-      "width": 650,
-      "height": {"step": 16},
+      "name": "rows",
+      "source": "dataset",
       "transform": [
         {
-          "calculate": "datum.Category",
-          "as": "Row Category"
+          "type": "formula",
+          "as": "Category",
+          "expr": "datum['Category Family']"
         },
         {
-          "calculate": "datum['Supplier Rate'] == null ? '—' : format(datum['Supplier Rate'], '.0%')",
-          "as": "Supplier Label"
+          "type": "formula",
+          "as": "Rate",
+          "expr": "isValid(datum['Attendance Rate']) ? toNumber(datum['Attendance Rate']) : null"
         },
         {
-          "calculate": "'100%'",
-          "as": "Reach Label"
+          "type": "formula",
+          "as": "Overall",
+          "expr": "isValid(datum['Overall Attendance Rate']) ? toNumber(datum['Overall Attendance Rate']) : null"
         },
         {
-          "fold": [
-            "Reach Label",
-            "RO",
-            "Supplier Label",
-            "Commit",
-            "Prove",
-            "Ready"
+          "type": "aggregate",
+          "groupby": [
+            "Category"
           ],
-          "as": ["Stage", "Value"]
-        },
-        {
-          "calculate": "datum.Stage == 'Reach Label' ? 1 : datum.Stage == 'RO' ? 2 : datum.Stage == 'Supplier Label' ? 3 : datum.Stage == 'Commit' ? 4 : datum.Stage == 'Prove' ? 5 : 6",
-          "as": "Stage Order"
-        },
-        {
-          "calculate": "datum.Stage == 'Reach Label' ? '#E5F2FF' : datum.Stage == 'RO' || datum.Stage == 'Supplier Label' ? '#E5F6EC' : datum.Stage == 'Commit' ? '#FFF6DD' : datum.Stage == 'Prove' ? '#E9EEFA' : '#E2F7F7'",
-          "as": "Cell Color"
-        },
-        {
-          "calculate": "datum.Stage == 'Reach Label' ? '#20A56C' : datum.Stage == 'Supplier Label' ? '#FFBF3C' : '#BFC3C8'",
-          "as": "Dot Color"
-        },
-        {
-          "calculate": "datum.Stage == 'Reach Label' ? '100%' : datum.Stage == 'Supplier Label' ? datum['Supplier Label'] : '—'",
-          "as": "Display Value"
-        }
-      ],
-      "encoding": {
-        "x": {
-          "field": "Stage Order",
-          "type": "ordinal",
-          "sort": "ascending",
-          "axis": null
-        },
-        "y": {
-          "field": "Row Category",
-          "type": "nominal",
-          "sort": "ascending",
-          "axis": {
-            "title": null,
-            "labelFontSize": 8,
-            "labelLimit": 165,
-            "labelPadding": 4,
-            "ticks": false,
-            "domain": false
-          }
-        }
-      },
-      "layer": [
-        {
-          "mark": {
-            "type": "rect",
-            "stroke": "#DDE4EC",
-            "strokeWidth": 0.4
-          },
-          "encoding": {
-            "color": {
-              "field": "Cell Color",
-              "type": "nominal",
-              "scale": null,
-              "legend": null
-            }
-          }
-        },
-        {
-          "mark": {
-            "type": "circle",
-            "size": 35,
-            "xOffset": -18
-          },
-          "encoding": {
-            "color": {
-              "field": "Dot Color",
-              "type": "nominal",
-              "scale": null,
-              "legend": null
-            }
-          }
-        },
-        {
-          "mark": {
-            "type": "text",
-            "fontSize": 8,
-            "fontWeight": "normal",
-            "color": "#17365D",
-            "xOffset": 9
-          },
-          "encoding": {
-            "text": {
-              "field": "Display Value"
-            }
-          }
-        }
-      ]
-    },
-    {
-      "width": 650,
-      "height": 20,
-      "transform": [
-        {
-          "aggregate": [
-            {
-              "op": "max",
-              "field": "Overall Rate",
-              "as": "Overall Rate"
-            }
+          "fields": [
+            "Rate",
+            "Overall"
+          ],
+          "ops": [
+            "max",
+            "max"
+          ],
+          "as": [
+            "Rate",
+            "Overall"
           ]
         },
         {
-          "calculate": "datum['Overall Rate'] == null ? '—' : format(datum['Overall Rate'], '.0%')",
-          "as": "Total Supplier Label"
+          "type": "collect",
+          "sort": {
+            "field": "Category",
+            "order": "ascending"
+          }
         },
         {
-          "calculate": "'100%'",
-          "as": "Reach Label"
-        },
-        {
-          "fold": [
-            "Reach Label",
-            "RO",
-            "Total Supplier Label",
-            "Commit",
-            "Prove",
-            "Ready"
+          "type": "window",
+          "ops": [
+            "row_number"
           ],
-          "as": ["Stage", "Value"]
+          "as": [
+            "Row"
+          ]
         },
         {
-          "calculate": "datum.Stage == 'Reach Label' ? 1 : datum.Stage == 'RO' ? 2 : datum.Stage == 'Total Supplier Label' ? 3 : datum.Stage == 'Commit' ? 4 : datum.Stage == 'Prove' ? 5 : 6",
-          "as": "Stage Order"
+          "type": "formula",
+          "as": "cy",
+          "expr": "62 + (datum.Row - 0.5)*19"
         },
         {
-          "calculate": "datum.Stage == 'Reach Label' ? '#E5F2FF' : datum.Stage == 'RO' || datum.Stage == 'Total Supplier Label' ? '#E5F6EC' : datum.Stage == 'Commit' ? '#FFF6DD' : datum.Stage == 'Prove' ? '#E9EEFA' : '#E2F7F7'",
-          "as": "Cell Color"
+          "type": "formula",
+          "as": "labelX",
+          "expr": "170"
+        }
+      ]
+    },
+    {
+      "name": "columns",
+      "values": [
+        {
+          "x0": 0,
+          "x1": 175,
+          "fill": "#F5F7FA"
         },
         {
-          "calculate": "datum.Stage == 'Reach Label' ? '#20A56C' : datum.Stage == 'Total Supplier Label' ? '#FFBF3C' : '#BFC3C8'",
-          "as": "Dot Color"
+          "x0": 175,
+          "x1": 250,
+          "fill": "#E5F2FF"
         },
         {
-          "calculate": "datum.Stage == 'Reach Label' ? '100%' : datum.Stage == 'Total Supplier Label' ? datum['Total Supplier Label'] : '—'",
-          "as": "Display Value"
+          "x0": 250,
+          "x1": 330,
+          "fill": "#E5F6EC"
+        },
+        {
+          "x0": 330,
+          "x1": 410,
+          "fill": "#E5F6EC"
+        },
+        {
+          "x0": 410,
+          "x1": 490,
+          "fill": "#FFF6DD"
+        },
+        {
+          "x0": 490,
+          "x1": 595,
+          "fill": "#E9EEFA"
+        },
+        {
+          "x0": 595,
+          "x1": 700,
+          "fill": "#E2F7F7"
+        }
+      ]
+    },
+    {
+      "name": "stages",
+      "values": [
+        {
+          "x0": 175,
+          "x1": 250,
+          "cx": 212.5,
+          "cy": 15,
+          "label": "S1 Reach",
+          "fill": "#1555A3"
+        },
+        {
+          "x0": 250,
+          "x1": 410,
+          "cx": 330.0,
+          "cy": 15,
+          "label": "S2 Acknowledge",
+          "fill": "#07954B"
+        },
+        {
+          "x0": 410,
+          "x1": 490,
+          "cx": 450.0,
+          "cy": 15,
+          "label": "S3 Commit",
+          "fill": "#FFC21A"
+        },
+        {
+          "x0": 490,
+          "x1": 595,
+          "cx": 542.5,
+          "cy": 15,
+          "label": "S4 Prove Capability",
+          "fill": "#273F91"
+        },
+        {
+          "x0": 595,
+          "x1": 700,
+          "cx": 647.5,
+          "cy": 15,
+          "label": "S5 Ready to Operate",
+          "fill": "#08AFB2"
+        }
+      ]
+    },
+    {
+      "name": "stagewords",
+      "values": [
+        {
+          "x": 212.5,
+          "y": 15,
+          "label": "S1 Reach"
+        },
+        {
+          "x": 330,
+          "y": 15,
+          "label": "S2 Acknowledge"
+        },
+        {
+          "x": 450,
+          "y": 15,
+          "label": "S3 Commit"
+        },
+        {
+          "x": 542.5,
+          "y": 10,
+          "label": "S4 Prove"
+        },
+        {
+          "x": 542.5,
+          "y": 21,
+          "label": "Capability"
+        },
+        {
+          "x": 647.5,
+          "y": 10,
+          "label": "S5 Ready to"
+        },
+        {
+          "x": 647.5,
+          "y": 21,
+          "label": "Operate"
+        }
+      ]
+    },
+    {
+      "name": "subheads",
+      "values": [
+        {
+          "x": 87.5,
+          "y": 44,
+          "label": "Category Family"
+        },
+        {
+          "x": 212.5,
+          "y": 44,
+          "label": "Email Coverage"
+        },
+        {
+          "x": 290,
+          "y": 44,
+          "label": "RO Attendance"
+        },
+        {
+          "x": 370,
+          "y": 38,
+          "label": "Supplier Webinar"
+        },
+        {
+          "x": 370,
+          "y": 50,
+          "label": "Attendance"
+        },
+        {
+          "x": 450,
+          "y": 44,
+          "label": "Commit"
+        },
+        {
+          "x": 542.5,
+          "y": 38,
+          "label": "Prove Capability"
+        },
+        {
+          "x": 647.5,
+          "y": 38,
+          "label": "Ready to"
+        },
+        {
+          "x": 647.5,
+          "y": 50,
+          "label": "Operate"
+        }
+      ]
+    },
+    {
+      "name": "cells",
+      "source": "rows",
+      "transform": [
+        {
+          "type": "cross",
+          "with": "columns",
+          "as": [
+            "r",
+            "c"
+          ]
+        },
+        {
+          "type": "formula",
+          "as": "x0",
+          "expr": "datum.c.x0"
+        },
+        {
+          "type": "formula",
+          "as": "x1",
+          "expr": "datum.c.x1"
+        },
+        {
+          "type": "formula",
+          "as": "fill",
+          "expr": "datum.c.fill"
+        },
+        {
+          "type": "formula",
+          "as": "y",
+          "expr": "datum.r.cy - 9.5"
+        }
+      ]
+    },
+    {
+      "name": "dots",
+      "source": "rows",
+      "transform": [
+        {
+          "type": "fold",
+          "fields": [
+            "Category",
+            "Rate"
+          ],
+          "as": [
+            "kind",
+            "unused"
+          ]
+        },
+        {
+          "type": "filter",
+          "expr": "datum.kind == 'Category' || datum.kind == 'Rate'"
+        },
+        {
+          "type": "formula",
+          "as": "x",
+          "expr": "datum.kind == 'Category' ? 190 : 344"
+        },
+        {
+          "type": "formula",
+          "as": "y",
+          "expr": "datum.cy"
+        },
+        {
+          "type": "formula",
+          "as": "fill",
+          "expr": "datum.kind == 'Category' ? '#20A56C' : '#FFBF3C'"
+        }
+      ]
+    },
+    {
+      "name": "values",
+      "source": "rows",
+      "transform": [
+        {
+          "type": "fold",
+          "fields": [
+            "Category",
+            "Rate"
+          ],
+          "as": [
+            "kind",
+            "unused"
+          ]
+        },
+        {
+          "type": "formula",
+          "as": "x",
+          "expr": "datum.kind == 'Category' ? 216 : 375"
+        },
+        {
+          "type": "formula",
+          "as": "y",
+          "expr": "datum.cy"
+        },
+        {
+          "type": "formula",
+          "as": "label",
+          "expr": "datum.kind == 'Category' ? '100%' : (isValid(datum.Rate) ? format(datum.Rate,'.0%') : '\u2014')"
+        }
+      ]
+    },
+    {
+      "name": "pending",
+      "source": "rows",
+      "transform": [
+        {
+          "type": "cross",
+          "with": "pendingcolumns",
+          "as": [
+            "r",
+            "c"
+          ]
+        },
+        {
+          "type": "formula",
+          "as": "x",
+          "expr": "datum.c.x"
+        },
+        {
+          "type": "formula",
+          "as": "y",
+          "expr": "datum.r.cy"
+        },
+        {
+          "type": "formula",
+          "as": "label",
+          "expr": "'\u2014'"
+        }
+      ]
+    },
+    {
+      "name": "pendingcolumns",
+      "values": [
+        {
+          "x": 290
+        },
+        {
+          "x": 450
+        },
+        {
+          "x": 542.5
+        },
+        {
+          "x": 647.5
+        }
+      ]
+    },
+    {
+      "name": "totalcells",
+      "source": "columns",
+      "transform": [
+        {
+          "type": "formula",
+          "as": "y",
+          "expr": "62 + length(data(\"rows\"))*19"
+        }
+      ]
+    },
+    {
+      "name": "totallabels",
+      "values": [
+        {
+          "x": 170,
+          "label": "Total"
+        },
+        {
+          "x": 216,
+          "label": "100%"
+        },
+        {
+          "x": 290,
+          "label": "\u2014"
+        },
+        {
+          "x": 375,
+          "label": ""
+        },
+        {
+          "x": 450,
+          "label": "\u2014"
+        },
+        {
+          "x": 542,
+          "label": "\u2014"
+        },
+        {
+          "x": 647,
+          "label": "\u2014"
         }
       ],
-      "encoding": {
-        "x": {
-          "field": "Stage Order",
-          "type": "ordinal",
-          "sort": "ascending",
-          "axis": null
-        }
-      },
-      "layer": [
+      "transform": [
         {
-          "mark": {
-            "type": "rect",
-            "stroke": "#DDE4EC",
-            "strokeWidth": 0.5
-          },
-          "encoding": {
-            "color": {
-              "field": "Cell Color",
-              "type": "nominal",
-              "scale": null,
-              "legend": null
-            }
-          }
+          "type": "formula",
+          "as": "y",
+          "expr": "62 + length(data(\"rows\"))*19 + 11"
         },
         {
-          "mark": {
-            "type": "circle",
-            "size": 35,
-            "xOffset": -18
-          },
-          "encoding": {
-            "color": {
-              "field": "Dot Color",
-              "type": "nominal",
-              "scale": null,
-              "legend": null
-            }
-          }
-        },
-        {
-          "mark": {
-            "type": "text",
-            "fontSize": 9,
-            "fontWeight": "bold",
-            "color": "#17365D",
-            "xOffset": 9
-          },
-          "encoding": {
-            "text": {
-              "field": "Display Value"
-            }
-          }
+          "type": "formula",
+          "as": "label",
+          "expr": "datum.x == 375 ? (length(data('rows')) > 0 && isValid(data('rows')[0].Overall) ? format(data('rows')[0].Overall,'.0%') : '\u2014') : datum.label"
         }
       ]
     }
   ],
-  "resolve": {
-    "scale": {
-      "x": "independent"
-    }
-  },
-  "config": {
-    "view": {
-      "stroke": null
+  "marks": [
+    {
+      "type": "rect",
+      "name": "stage-header",
+      "from": {
+        "data": "stages"
+      },
+      "encode": {
+        "enter": {
+          "x": {
+            "field": "x0"
+          },
+          "x2": {
+            "field": "x1"
+          },
+          "y": {
+            "value": 0
+          },
+          "y2": {
+            "value": 30
+          },
+          "fill": {
+            "field": "fill"
+          },
+          "cornerRadius": {
+            "value": 3
+          }
+        }
+      }
     },
-    "font": "Segoe UI"
+    {
+      "type": "text",
+      "name": "stage-label",
+      "from": {
+        "data": "stagewords"
+      },
+      "encode": {
+        "enter": {
+          "x": {
+            "field": "x"
+          },
+          "y": {
+            "field": "y"
+          },
+          "text": {
+            "field": "label"
+          },
+          "font": {
+            "value": "Segoe UI"
+          },
+          "fontSize": {
+            "value": 9
+          },
+          "fontWeight": {
+            "value": "bold"
+          },
+          "align": {
+            "value": "center"
+          },
+          "baseline": {
+            "value": "middle"
+          },
+          "fill": {
+            "value": "#FFFFFF"
+          }
+        }
+      }
+    },
+    {
+      "type": "rect",
+      "name": "subheader-background",
+      "from": {
+        "data": "columns"
+      },
+      "encode": {
+        "enter": {
+          "x": {
+            "field": "x0"
+          },
+          "x2": {
+            "field": "x1"
+          },
+          "y": {
+            "value": 30
+          },
+          "y2": {
+            "value": 62
+          },
+          "fill": {
+            "field": "fill"
+          },
+          "cornerRadius": {
+            "value": 0
+          }
+        }
+      }
+    },
+    {
+      "type": "text",
+      "name": "subheader-label",
+      "from": {
+        "data": "subheads"
+      },
+      "encode": {
+        "enter": {
+          "x": {
+            "field": "x"
+          },
+          "y": {
+            "field": "y"
+          },
+          "text": {
+            "field": "label"
+          },
+          "font": {
+            "value": "Segoe UI"
+          },
+          "fontSize": {
+            "value": 8
+          },
+          "fontWeight": {
+            "value": "bold"
+          },
+          "align": {
+            "value": "center"
+          },
+          "baseline": {
+            "value": "middle"
+          },
+          "fill": {
+            "value": "#17365D"
+          }
+        }
+      }
+    },
+    {
+      "type": "rect",
+      "from": {
+        "data": "cells"
+      },
+      "encode": {
+        "enter": {
+          "x": {
+            "field": "x0"
+          },
+          "x2": {
+            "field": "x1"
+          },
+          "y": {
+            "field": "y"
+          },
+          "height": {
+            "value": 19
+          },
+          "fill": {
+            "field": "fill"
+          },
+          "stroke": {
+            "value": "#DDE4EC"
+          },
+          "strokeWidth": {
+            "value": 0.35
+          }
+        }
+      }
+    },
+    {
+      "type": "text",
+      "name": "category-label",
+      "from": {
+        "data": "rows"
+      },
+      "encode": {
+        "enter": {
+          "x": {
+            "field": "labelX"
+          },
+          "y": {
+            "field": "cy"
+          },
+          "text": {
+            "field": "Category"
+          },
+          "font": {
+            "value": "Segoe UI"
+          },
+          "fontSize": {
+            "value": 8
+          },
+          "fontWeight": {
+            "value": "normal"
+          },
+          "align": {
+            "value": "right"
+          },
+          "baseline": {
+            "value": "middle"
+          },
+          "fill": {
+            "value": "#17365D"
+          }
+        }
+      }
+    },
+    {
+      "type": "symbol",
+      "from": {
+        "data": "dots"
+      },
+      "encode": {
+        "enter": {
+          "x": {
+            "field": "x"
+          },
+          "y": {
+            "field": "y"
+          },
+          "size": {
+            "value": 34
+          },
+          "shape": {
+            "value": "circle"
+          },
+          "fill": {
+            "field": "fill"
+          }
+        }
+      }
+    },
+    {
+      "type": "text",
+      "name": "value-labels",
+      "from": {
+        "data": "values"
+      },
+      "encode": {
+        "enter": {
+          "x": {
+            "field": "x"
+          },
+          "y": {
+            "field": "y"
+          },
+          "text": {
+            "field": "label"
+          },
+          "font": {
+            "value": "Segoe UI"
+          },
+          "fontSize": {
+            "value": 9
+          },
+          "fontWeight": {
+            "value": "normal"
+          },
+          "align": {
+            "value": "center"
+          },
+          "baseline": {
+            "value": "middle"
+          },
+          "fill": {
+            "value": "#17365D"
+          }
+        }
+      }
+    },
+    {
+      "type": "text",
+      "name": "pending-labels",
+      "from": {
+        "data": "pending"
+      },
+      "encode": {
+        "enter": {
+          "x": {
+            "field": "x"
+          },
+          "y": {
+            "field": "y"
+          },
+          "text": {
+            "field": "label"
+          },
+          "font": {
+            "value": "Segoe UI"
+          },
+          "fontSize": {
+            "value": 9
+          },
+          "fontWeight": {
+            "value": "normal"
+          },
+          "align": {
+            "value": "center"
+          },
+          "baseline": {
+            "value": "middle"
+          },
+          "fill": {
+            "value": "#A5ABB4"
+          }
+        }
+      }
+    },
+    {
+      "type": "rect",
+      "from": {
+        "data": "totalcells"
+      },
+      "encode": {
+        "enter": {
+          "x": {
+            "field": "x0"
+          },
+          "x2": {
+            "field": "x1"
+          },
+          "y": {
+            "field": "y"
+          },
+          "height": {
+            "value": 22
+          },
+          "fill": {
+            "field": "fill"
+          },
+          "stroke": {
+            "value": "#B8C6D6"
+          },
+          "strokeWidth": {
+            "value": 0.7
+          }
+        }
+      }
+    },
+    {
+      "type": "text",
+      "name": "total-labels",
+      "from": {
+        "data": "totallabels"
+      },
+      "encode": {
+        "enter": {
+          "x": {
+            "field": "x"
+          },
+          "y": {
+            "field": "y"
+          },
+          "text": {
+            "field": "label"
+          },
+          "font": {
+            "value": "Segoe UI"
+          },
+          "fontSize": {
+            "value": 9
+          },
+          "fontWeight": {
+            "value": "bold"
+          },
+          "align": {
+            "value": "center"
+          },
+          "baseline": {
+            "value": "middle"
+          },
+          "fill": {
+            "value": "#17365D"
+          }
+        }
+      }
+    }
+  ],
+  "config": {
+    "text": {
+      "font": "Segoe UI"
+    }
   }
 }

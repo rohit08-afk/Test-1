@@ -8,9 +8,7 @@
   },
   "padding": 0,
   "width": 700,
-  "height": {
-    "signal": "max(90, 62 + length(data(\"rows\"))*19 + 22)"
-  },
+  "height": 340,
   "data": [
     {
       "name": "dataset"
@@ -353,7 +351,7 @@
         {
           "type": "formula",
           "as": "label",
-          "expr": "datum.kind == 'Category' ? '100%' : (isValid(datum.Rate) ? format(datum.Rate,'.0%') : '\u2014')"
+          "expr": "datum.kind == 'Category' ? '100%' : (isValid(datum.Rate) ? format(datum.Rate,'.0%') : '—')"
         }
       ]
     },
@@ -382,7 +380,7 @@
         {
           "type": "formula",
           "as": "label",
-          "expr": "'\u2014'"
+          "expr": "'—'"
         }
       ]
     },
@@ -427,7 +425,7 @@
         },
         {
           "x": 290,
-          "label": "\u2014"
+          "label": "—"
         },
         {
           "x": 375,
@@ -435,15 +433,15 @@
         },
         {
           "x": 450,
-          "label": "\u2014"
+          "label": "—"
         },
         {
           "x": 542,
-          "label": "\u2014"
+          "label": "—"
         },
         {
           "x": 647,
-          "label": "\u2014"
+          "label": "—"
         }
       ],
       "transform": [
@@ -455,7 +453,7 @@
         {
           "type": "formula",
           "as": "label",
-          "expr": "datum.x == 375 ? (length(data('rows')) > 0 && isValid(data('rows')[0].Overall) ? format(data('rows')[0].Overall,'.0%') : '\u2014') : datum.label"
+          "expr": "datum.x == 375 ? (length(data('rows')) > 0 && isValid(data('rows')[0].Overall) ? format(data('rows')[0].Overall,'.0%') : '—') : datum.label"
         }
       ]
     }

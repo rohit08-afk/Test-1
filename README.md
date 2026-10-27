@@ -4,6 +4,8 @@
   "data": {
     "name": "dataset"
   },
+  "background": "transparent",
+  "spacing": 8,
   "transform": [
     {
       "calculate": "isValid(datum['Webinar Attended']) ? +datum['Webinar Attended'] : 0",
@@ -26,10 +28,9 @@
       "as": "Rate Label"
     }
   ],
-  "spacing": 3,
   "hconcat": [
     {
-      "width": 150,
+      "width": 330,
       "height": {
         "step": 13
       },
@@ -81,7 +82,7 @@
           "axis": {
             "title": null,
             "labelFontSize": 8,
-            "labelLimit": 115,
+            "labelLimit": 155,
             "ticks": false,
             "domain": false,
             "labelPadding": 3
@@ -147,7 +148,7 @@
         {
           "mark": {
             "type": "text",
-            "fontSize": 8,
+            "fontSize": 7,
             "fontWeight": "normal",
             "align": "center",
             "baseline": "middle"
@@ -167,7 +168,7 @@
             },
             "opacity": {
               "condition": {
-                "test": "datum.Count > 0",
+                "test": "datum.Count > 0 && (datum.x1 - datum.x0) >= 8",
                 "value": 1
               },
               "value": 0
@@ -177,14 +178,14 @@
       ]
     },
     {
-      "width": 45,
+      "width": 75,
       "height": {
         "step": 13
       },
       "mark": {
         "type": "text",
         "fontSize": 9,
-        "fontWeight": "bold",
+        "fontWeight": "normal",
         "align": "center",
         "baseline": "middle",
         "color": "#17365D"
@@ -210,14 +211,14 @@
       }
     },
     {
-      "width": 45,
+      "width": 90,
       "height": {
         "step": 13
       },
       "mark": {
         "type": "text",
         "fontSize": 9,
-        "fontWeight": "bold",
+        "fontWeight": "normal",
         "align": "center",
         "baseline": "middle",
         "color": "#17365D"
@@ -251,6 +252,9 @@
     "view": {
       "stroke": null
     },
-    "background": "transparent"
+    "axis": {
+      "grid": false
+    },
+    "font": "Segoe UI"
   }
 }

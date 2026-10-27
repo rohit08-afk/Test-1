@@ -1,36 +1,7 @@
 
-RO Overall Completion % =
-VAR TotalTopics = 4
-VAR CompletedROTopics =
-    SUMX(
-        VALUES('GL1 RO Attendance Mapping'[RO]),
-        VAR CurrentRO = 'GL1 RO Attendance Mapping'[RO]
-        RETURN
-            CALCULATE(
-                DISTINCTCOUNT('GL1 RO Session Attendance unique'[Topic]),
-                'GL1 RO Session Attendance unique'[Attended] = 1,
-                TREATAS(
-                    {CurrentRO},
-                    'GL1 RO Session Attendance unique'[RO]
-                )
-            )
-    )
-RETURN
-    DIVIDE(
-        CompletedROTopics,
-        [Total ROs] * TotalTopics,
-        0
-    )
-
-
-
-
-
 {
   "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
-  "data": {
-    "name": "dataset"
-  },
+  "data": {"name": "dataset"},
   "background": "transparent",
   "spacing": 8,
   "transform": [
@@ -54,19 +25,11 @@ RETURN
   "hconcat": [
     {
       "width": 250,
-      "height": {
-        "step": 13
-      },
+      "height": {"step": 13},
       "transform": [
         {
-          "fold": [
-            "Attended Count",
-            "Not Attended Count"
-          ],
-          "as": [
-            "Status",
-            "Count"
-          ]
+          "fold": ["Attended Count", "Not Attended Count"],
+          "as": ["Status", "Count"]
         },
         {
           "calculate": "datum.Status == 'Attended Count' ? 'Attended' : 'Not Attended'",
@@ -78,19 +41,9 @@ RETURN
         },
         {
           "stack": "Count",
-          "groupby": [
-            "Category Family"
-          ],
-          "sort": [
-            {
-              "field": "Sort Order",
-              "order": "ascending"
-            }
-          ],
-          "as": [
-            "x0",
-            "x1"
-          ]
+          "groupby": ["Category Family"],
+          "sort": [{"field": "Sort Order", "order": "ascending"}],
+          "as": ["x0", "x1"]
         },
         {
           "calculate": "(datum.x0 + datum.x1) / 2",
@@ -115,48 +68,25 @@ RETURN
           "field": "x1",
           "type": "quantitative",
           "axis": null,
-          "scale": {
-            "zero": true
-          }
+          "scale": {"zero": true}
         },
         "tooltip": [
-          {
-            "field": "Category Family",
-            "type": "nominal"
-          },
-          {
-            "field": "Attendance Status",
-            "type": "nominal"
-          },
-          {
-            "field": "Count",
-            "type": "quantitative",
-            "format": ".0f"
-          }
+          {"field": "Category Family", "type": "nominal"},
+          {"field": "Attendance Status", "type": "nominal"},
+          {"field": "Count", "type": "quantitative", "format": ".0f"}
         ]
       },
       "layer": [
         {
-          "mark": {
-            "type": "bar",
-            "height": 8
-          },
+          "mark": {"type": "bar", "height": 8},
           "encoding": {
-            "x2": {
-              "field": "x0"
-            },
+            "x2": {"field": "x0"},
             "color": {
               "field": "Attendance Status",
               "type": "nominal",
               "scale": {
-                "domain": [
-                  "Attended",
-                  "Not Attended"
-                ],
-                "range": [
-                  "#16A085",
-                  "#F28C45"
-                ]
+                "domain": ["Attended", "Not Attended"],
+                "range": ["#16A085", "#F28C45"]
               },
               "legend": {
                 "orient": "top",
@@ -186,9 +116,7 @@ RETURN
               "type": "quantitative",
               "format": ".0f"
             },
-            "color": {
-              "value": "#000000"
-            },
+            "color": {"value": "#000000"},
             "opacity": {
               "condition": {
                 "test": "datum.Count > 0 && (datum.x1 - datum.x0) >= 8",
@@ -202,9 +130,7 @@ RETURN
     },
     {
       "width": 75,
-      "height": {
-        "step": 13
-      },
+      "height": {"step": 13},
       "mark": {
         "type": "text",
         "fontSize": 9,
@@ -235,9 +161,7 @@ RETURN
     },
     {
       "width": 90,
-      "height": {
-        "step": 13
-      },
+      "height": {"step": 13},
       "mark": {
         "type": "text",
         "fontSize": 9,
@@ -267,17 +191,11 @@ RETURN
     }
   ],
   "resolve": {
-    "scale": {
-      "y": "shared"
-    }
+    "scale": {"y": "shared"}
   },
   "config": {
-    "view": {
-      "stroke": null
-    },
-    "axis": {
-      "grid": false
-    },
+    "view": {"stroke": null},
+    "axis": {"grid": false},
     "font": "Segoe UI"
   }
 }

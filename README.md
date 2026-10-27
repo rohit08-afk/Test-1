@@ -6,11 +6,11 @@
   },
   "transform": [
     {
-      "calculate": "isValid(datum['GL1 Webinar Attended']) ? +datum['GL1 Webinar Attended'] : 0",
+      "calculate": "isValid(datum['Webinar Attended']) ? +datum['Webinar Attended'] : 0",
       "as": "Attended Count"
     },
     {
-      "calculate": "isValid(datum['GL1 Webinar Not Attended']) ? +datum['GL1 Webinar Not Attended'] : 0",
+      "calculate": "isValid(datum['Webinar Not Attended']) ? +datum['Webinar Not Attended'] : 0",
       "as": "Not Attended Count"
     },
     {
@@ -26,12 +26,12 @@
       "as": "Rate Label"
     }
   ],
-  "spacing": 5,
+  "spacing": 3,
   "hconcat": [
     {
-      "width": 230,
+      "width": 150,
       "height": {
-        "step": 24
+        "step": 13
       },
       "transform": [
         {
@@ -80,11 +80,11 @@
           "sort": "ascending",
           "axis": {
             "title": null,
-            "labelFontSize": 10,
-            "labelLimit": 145,
+            "labelFontSize": 8,
+            "labelLimit": 115,
             "ticks": false,
             "domain": false,
-            "labelPadding": 5
+            "labelPadding": 3
           }
         },
         "x": {
@@ -115,7 +115,7 @@
         {
           "mark": {
             "type": "bar",
-            "height": 16
+            "height": 8
           },
           "encoding": {
             "x2": {
@@ -137,8 +137,8 @@
               "legend": {
                 "orient": "top",
                 "title": null,
-                "labelFontSize": 10,
-                "symbolSize": 90,
+                "labelFontSize": 8,
+                "symbolSize": 50,
                 "offset": 2
               }
             }
@@ -147,8 +147,8 @@
         {
           "mark": {
             "type": "text",
-            "fontSize": 11,
-            "fontWeight": "bold",
+            "fontSize": 8,
+            "fontWeight": "normal",
             "align": "center",
             "baseline": "middle"
           },
@@ -163,7 +163,7 @@
               "format": ".0f"
             },
             "color": {
-              "value": "#FFFFFF"
+              "value": "#000000"
             },
             "opacity": {
               "condition": {
@@ -177,13 +177,13 @@
       ]
     },
     {
-      "width": 55,
+      "width": 45,
       "height": {
-        "step": 24
+        "step": 13
       },
       "mark": {
         "type": "text",
-        "fontSize": 12,
+        "fontSize": 9,
         "fontWeight": "bold",
         "align": "center",
         "baseline": "middle",
@@ -204,19 +204,19 @@
       },
       "title": {
         "text": "Total Suppliers",
-        "fontSize": 11,
+        "fontSize": 9,
         "fontWeight": "bold",
         "color": "#17365D"
       }
     },
     {
-      "width": 55,
+      "width": 45,
       "height": {
-        "step": 24
+        "step": 13
       },
       "mark": {
         "type": "text",
-        "fontSize": 12,
+        "fontSize": 9,
         "fontWeight": "bold",
         "align": "center",
         "baseline": "middle",
@@ -236,7 +236,7 @@
       },
       "title": {
         "text": "Attendance Rate",
-        "fontSize": 11,
+        "fontSize": 9,
         "fontWeight": "bold",
         "color": "#17365D"
       }

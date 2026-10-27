@@ -1,31 +1,15 @@
 
 {
   "$schema": "https://vega.github.io/schema/vega/v5.json",
-  "description": "Compact supplier readiness matrix",
+  "description": "Supplier readiness by category family",
+  "width": 580,
+  "height": 310,
+  "padding": 0,
+  "autosize": "none",
   "background": "transparent",
-  "autosize": {
-    "type": "pad",
-    "contains": "padding"
-  },
-  "padding": 2,
-  "width": 575,
-  "height": 360,
-  "signals": [
-    {
-      "name": "rowHeight",
-      "value": 21
-    },
-    {
-      "name": "bodyTop",
-      "value": 77
-    }
-  ],
   "data": [
     {
-      "name": "dataset"
-    },
-    {
-      "name": "categories",
+      "name": "source",
       "source": "dataset",
       "transform": [
         {
@@ -36,14 +20,19 @@
         {
           "type": "formula",
           "as": "Rate",
-          "expr": "isValid(datum['Attendance Rate']) ? toNumber(datum['Attendance Rate']) : null"
+          "expr": "isValid(datum['Attendance Rate']) ? toNumber(datum['Attendance Rate']) : 0"
+        },
+        {
+          "type": "formula",
+          "as": "Overall",
+          "expr": "isValid(datum['Overall Attendance Rate']) ? toNumber(datum['Overall Attendance Rate']) : 0"
         },
         {
           "type": "aggregate",
           "groupby": ["Category"],
-          "fields": ["Rate"],
-          "ops": ["max"],
-          "as": ["Rate"]
+          "fields": ["Rate", "Overall"],
+          "ops": ["max", "max"],
+          "as": ["Rate", "Overall"]
         },
         {
           "type": "collect",
@@ -59,101 +48,108 @@
         },
         {
           "type": "formula",
-          "as": "cy",
-          "expr": "bodyTop + (datum.Row - 0.5) * rowHeight"
-        },
-        {
-          "type": "formula",
-          "as": "SupplierLabel",
-          "expr": "datum.Rate == null ? '—' : format(datum.Rate, '.0%')"
-        }
-      ]
-    },
-    {
-      "name": "total",
-      "source": "dataset",
-      "transform": [
-        {
-          "type": "formula",
-          "as": "Overall",
-          "expr": "isValid(datum['Overall Attendance Rate']) ? toNumber(datum['Overall Attendance Rate']) : null"
-        },
-        {
-          "type": "aggregate",
-          "fields": ["Overall"],
-          "ops": ["max"],
-          "as": ["Overall"]
-        },
-        {
-          "type": "formula",
-          "as": "Label",
-          "expr": "datum.Overall == null ? '—' : format(datum.Overall, '.0%')"
+          "as": "Y",
+          "expr": "73 + (datum.Row - 1) * 20"
         }
       ]
     },
     {
       "name": "columns",
       "values": [
-        {"x": 0, "x2": 155, "fill": "#FFFFFF"},
-        {"x": 155, "x2": 215, "fill": "#E5F2FF"},
-        {"x": 215, "x2": 280, "fill": "#E5F6EC"},
-        {"x": 280, "x2": 375, "fill": "#E5F6EC"},
-        {"x": 375, "x2": 435, "fill": "#FFF6DD"},
-        {"x": 435, "x2": 505, "fill": "#E9EEFA"},
-        {"x": 505, "x2": 575, "fill": "#E2F7F7"}
+        {"x": 135, "x2": 200, "fill": "#E5F2FF"},
+        {"x": 200, "x2": 270, "fill": "#E5F6EC"},
+        {"x": 270, "x2": 375, "fill": "#FFF4DD"},
+        {"x": 375, "x2": 440, "fill": "#FFF0DD"},
+        {"x": 440, "x2": 510, "fill": "#EEEEFF"},
+        {"x": 510, "x2": 580, "fill": "#E2F7F7"}
       ]
     },
     {
       "name": "stages",
       "values": [
-        {"x": 155, "x2": 215, "label": "S1 Reach", "fill": "#1555AB", "color": "#FFFFFF"},
-        {"x": 215, "x2": 375, "label": "S2 Acknowledge", "fill": "#07954B", "color": "#FFFFFF"},
-        {"x": 375, "x2": 435, "label": "S3 Commit", "fill": "#FFC21A", "color": "#17365D"},
-        {"x": 435, "x2": 505, "label": "S4 Prove", "fill": "#273F91", "color": "#FFFFFF"},
-        {"x": 505, "x2": 575, "label": "S5 Ready", "fill": "#08AFAF", "color": "#FFFFFF"}
+        {
+          "x": 135,
+          "x2": 200,
+          "label": "S1 Reach",
+          "fill": "#1555AB",
+          "color": "#FFFFFF"
+        },
+        {
+          "x": 200,
+          "x2": 375,
+          "label": "S2 Acknowledge",
+          "fill": "#07954B",
+          "color": "#FFFFFF"
+        },
+        {
+          "x": 375,
+          "x2": 440,
+          "label": "S3 Commit",
+          "fill": "#FFC21A",
+          "color": "#17365D"
+        },
+        {
+          "x": 440,
+          "x2": 510,
+          "label": "S4 Prove",
+          "fill": "#273F91",
+          "color": "#FFFFFF"
+        },
+        {
+          "x": 510,
+          "x2": 580,
+          "label": "S5 Ready",
+          "fill": "#08AFB2",
+          "color": "#FFFFFF"
+        }
       ]
     },
     {
       "name": "subheaders",
       "values": [
-        {"x": 185, "label": "Email", "line2": "Coverage"},
-        {"x": 247, "label": "RO", "line2": "Attendance"},
-        {"x": 327, "label": "Supplier Webinar", "line2": "Attendance"},
-        {"x": 405, "label": "Commit", "line2": ""},
-        {"x": 470, "label": "Prove", "line2": "Capability"},
-        {"x": 540, "label": "Ready to", "line2": "Operate"}
+        {"x": 167.5, "line1": "Email", "line2": "Coverage"},
+        {"x": 235, "line1": "RO", "line2": "Attendance"},
+        {"x": 322.5, "line1": "Supplier Webinar", "line2": "Attendance"},
+        {"x": 407.5, "line1": "Commit", "line2": ""},
+        {"x": 475, "line1": "Prove", "line2": "Capability"},
+        {"x": 545, "line1": "Ready to", "line2": "Operate"}
       ]
     },
     {
       "name": "cells",
-      "source": "categories",
+      "source": "source",
       "transform": [
         {
-          "type": "formula",
-          "as": "Items",
-          "expr": "[{'x':185,'label':'100%','dot':'#20A56C'},{'x':247,'label':'—','dot':'#BFC3C8'},{'x':327,'label':datum.SupplierLabel,'dot':datum.Rate == null ? '#BFC3C8' : datum.Rate == 0 ? '#FF5757' : '#FFBF3C'},{'x':405,'label':'—','dot':'#BFC3C8'},{'x':470,'label':'—','dot':'#BFC3C8'},{'x':540,'label':'—','dot':'#BFC3C8'}]"
-        },
-        {
-          "type": "flatten",
-          "fields": ["Items"],
-          "as": ["Item"]
-        },
-        {
-          "type": "formula",
-          "as": "cx",
-          "expr": "datum.Item.x"
-        },
-        {
-          "type": "formula",
-          "as": "label",
-          "expr": "datum.Item.label"
-        },
-        {
-          "type": "formula",
-          "as": "dot",
-          "expr": "datum.Item.dot"
+          "type": "fold",
+          "fields": [
+            "Reach",
+            "RO",
+            "Supplier",
+            "Commit",
+            "Prove",
+            "Ready"
+          ],
+          "as": ["Stage", "Unused"]
         }
       ]
+    },
+    {
+      "name": "total",
+      "source": "source",
+      "transform": [
+        {
+          "type": "aggregate",
+          "fields": ["Overall"],
+          "ops": ["max"],
+          "as": ["Rate"]
+        }
+      ]
+    }
+  ],
+  "signals": [
+    {
+      "name": "totalY",
+      "update": "73 + length(data('source')) * 20 + 7"
     }
   ],
   "marks": [
@@ -161,11 +157,11 @@
       "type": "rect",
       "from": {"data": "columns"},
       "encode": {
-        "enter": {
+        "update": {
           "x": {"field": "x"},
           "x2": {"field": "x2"},
-          "y": {"value": 38},
-          "y2": {"value": 340},
+          "y": {"value": 42},
+          "y2": {"signal": "totalY + 14"},
           "fill": {"field": "fill"}
         }
       }
@@ -174,13 +170,13 @@
       "type": "rect",
       "from": {"data": "stages"},
       "encode": {
-        "enter": {
+        "update": {
           "x": {"field": "x"},
           "x2": {"field": "x2"},
           "y": {"value": 0},
-          "height": {"value": 34},
-          "cornerRadius": {"value": 5},
-          "fill": {"field": "fill"}
+          "height": {"value": 32},
+          "fill": {"field": "fill"},
+          "cornerRadius": {"value": 4}
         }
       }
     },
@@ -188,13 +184,14 @@
       "type": "text",
       "from": {"data": "stages"},
       "encode": {
-        "enter": {
-          "x": {"signal": "(datum.x + datum.x2)/2"},
-          "y": {"value": 17},
+        "update": {
+          "x": {
+            "signal": "(datum.x + datum.x2) / 2"
+          },
+          "y": {"value": 16},
           "text": {"field": "label"},
           "align": {"value": "center"},
           "baseline": {"value": "middle"},
-          "font": {"value": "Segoe UI"},
           "fontSize": {"value": 9},
           "fontWeight": {"value": "bold"},
           "fill": {"field": "color"}
@@ -204,9 +201,9 @@
     {
       "type": "text",
       "encode": {
-        "enter": {
-          "x": {"value": 5},
-          "y": {"value": 55},
+        "update": {
+          "x": {"value": 4},
+          "y": {"value": 52},
           "text": {"value": "Category Family"},
           "fontSize": {"value": 9},
           "fontWeight": {"value": "bold"},
@@ -218,12 +215,12 @@
       "type": "text",
       "from": {"data": "subheaders"},
       "encode": {
-        "enter": {
+        "update": {
           "x": {"field": "x"},
-          "y": {"value": 49},
-          "text": {"field": "label"},
+          "y": {"value": 47},
+          "text": {"field": "line1"},
           "align": {"value": "center"},
-          "fontSize": {"value": 9},
+          "fontSize": {"value": 8},
           "fontWeight": {"value": "bold"},
           "fill": {"value": "#17365D"}
         }
@@ -233,78 +230,201 @@
       "type": "text",
       "from": {"data": "subheaders"},
       "encode": {
-        "enter": {
+        "update": {
           "x": {"field": "x"},
-          "y": {"value": 62},
+          "y": {"value": 58},
           "text": {"field": "line2"},
           "align": {"value": "center"},
-          "fontSize": {"value": 9},
+          "fontSize": {"value": 8},
           "fill": {"value": "#17365D"}
         }
       }
     },
     {
       "type": "text",
-      "from": {"data": "categories"},
+      "from": {"data": "source"},
       "encode": {
-        "enter": {
-          "x": {"value": 5},
-          "y": {"field": "cy"},
+        "update": {
+          "x": {"value": 4},
+          "y": {"field": "Y"},
           "text": {"field": "Category"},
-          "baseline": {"value": "middle"},
           "fontSize": {"value": 8},
-          "fill": {"value": "#17365D"},
-          "limit": {"value": 145}
+          "limit": {"value": 127},
+          "baseline": {"value": "middle"},
+          "fill": {"value": "#17365D"}
         }
       }
     },
     {
       "type": "symbol",
-      "from": {"data": "cells"},
+      "from": {"data": "source"},
       "encode": {
-        "enter": {
-          "x": {"signal": "datum.cx - 18"},
-          "y": {"field": "cy"},
-          "size": {"value": 40},
-          "fill": {"field": "dot"}
+        "update": {
+          "x": {"value": 151},
+          "y": {"field": "Y"},
+          "size": {"value": 45},
+          "fill": {"value": "#2BA878"}
         }
       }
     },
     {
       "type": "text",
-      "from": {"data": "cells"},
+      "from": {"data": "source"},
       "encode": {
-        "enter": {
-          "x": {"signal": "datum.cx + 8"},
-          "y": {"field": "cy"},
-          "text": {"field": "label"},
+        "update": {
+          "x": {"value": 167},
+          "y": {"field": "Y"},
+          "text": {"value": "100%"},
+          "fontSize": {"value": 8},
+          "baseline": {"value": "middle"},
+          "fill": {"value": "#17365D"}
+        }
+      }
+    },
+    {
+      "type": "text",
+      "from": {"data": "source"},
+      "encode": {
+        "update": {
+          "x": {"value": 235},
+          "y": {"field": "Y"},
+          "text": {"value": "—"},
           "align": {"value": "center"},
           "baseline": {"value": "middle"},
           "fontSize": {"value": 8},
+          "fill": {"value": "#777777"}
+        }
+      }
+    },
+    {
+      "type": "symbol",
+      "from": {"data": "source"},
+      "encode": {
+        "update": {
+          "x": {"value": 292},
+          "y": {"field": "Y"},
+          "size": {"value": 45},
+          "fill": {
+            "signal": "datum.Rate === 0 ? '#F05252' : '#FFBF36'"
+          }
+        }
+      }
+    },
+    {
+      "type": "text",
+      "from": {"data": "source"},
+      "encode": {
+        "update": {
+          "x": {"value": 306},
+          "y": {"field": "Y"},
+          "text": {
+            "signal": "format(datum.Rate, '.0%')"
+          },
+          "fontSize": {"value": 8},
+          "baseline": {"value": "middle"},
           "fill": {"value": "#17365D"}
+        }
+      }
+    },
+    {
+      "type": "symbol",
+      "from": {"data": "source"},
+      "encode": {
+        "update": {
+          "x": {"value": 393},
+          "y": {"field": "Y"},
+          "size": {"value": 25},
+          "fill": {"value": "#D3D7DE"}
+        }
+      }
+    },
+    {
+      "type": "symbol",
+      "from": {"data": "source"},
+      "encode": {
+        "update": {
+          "x": {"value": 457},
+          "y": {"field": "Y"},
+          "size": {"value": 25},
+          "fill": {"value": "#D3D7DE"}
+        }
+      }
+    },
+    {
+      "type": "symbol",
+      "from": {"data": "source"},
+      "encode": {
+        "update": {
+          "x": {"value": 527},
+          "y": {"field": "Y"},
+          "size": {"value": 25},
+          "fill": {"value": "#D3D7DE"}
+        }
+      }
+    },
+    {
+      "type": "text",
+      "from": {"data": "source"},
+      "encode": {
+        "update": {
+          "x": {"value": 408},
+          "y": {"field": "Y"},
+          "text": {"value": "—"},
+          "fontSize": {"value": 8},
+          "baseline": {"value": "middle"},
+          "fill": {"value": "#777777"}
+        }
+      }
+    },
+    {
+      "type": "text",
+      "from": {"data": "source"},
+      "encode": {
+        "update": {
+          "x": {"value": 472},
+          "y": {"field": "Y"},
+          "text": {"value": "—"},
+          "fontSize": {"value": 8},
+          "baseline": {"value": "middle"},
+          "fill": {"value": "#777777"}
+        }
+      }
+    },
+    {
+      "type": "text",
+      "from": {"data": "source"},
+      "encode": {
+        "update": {
+          "x": {"value": 542},
+          "y": {"field": "Y"},
+          "text": {"value": "—"},
+          "fontSize": {"value": 8},
+          "baseline": {"value": "middle"},
+          "fill": {"value": "#777777"}
         }
       }
     },
     {
       "type": "rule",
       "encode": {
-        "enter": {
+        "update": {
           "x": {"value": 0},
-          "x2": {"value": 575},
-          "y": {"value": 315},
-          "stroke": {"value": "#CCD5DF"}
+          "x2": {"value": 580},
+          "y": {"signal": "totalY - 10"},
+          "stroke": {"value": "#D1D5DB"}
         }
       }
     },
     {
       "type": "text",
       "encode": {
-        "enter": {
-          "x": {"value": 5},
-          "y": {"value": 330},
+        "update": {
+          "x": {"value": 4},
+          "y": {"signal": "totalY"},
           "text": {"value": "Total"},
           "fontSize": {"value": 9},
           "fontWeight": {"value": "bold"},
+          "baseline": {"value": "middle"},
           "fill": {"value": "#17365D"}
         }
       }
@@ -312,13 +432,13 @@
     {
       "type": "text",
       "encode": {
-        "enter": {
-          "x": {"value": 185},
-          "y": {"value": 330},
+        "update": {
+          "x": {"value": 167},
+          "y": {"signal": "totalY"},
           "text": {"value": "100%"},
-          "align": {"value": "center"},
           "fontSize": {"value": 9},
           "fontWeight": {"value": "bold"},
+          "baseline": {"value": "middle"},
           "fill": {"value": "#17365D"}
         }
       }
@@ -327,21 +447,18 @@
       "type": "text",
       "from": {"data": "total"},
       "encode": {
-        "enter": {
-          "x": {"value": 327},
-          "y": {"value": 330},
-          "text": {"field": "Label"},
-          "align": {"value": "center"},
+        "update": {
+          "x": {"value": 306},
+          "y": {"signal": "totalY"},
+          "text": {
+            "signal": "format(datum.Rate, '.0%')"
+          },
           "fontSize": {"value": 9},
           "fontWeight": {"value": "bold"},
+          "baseline": {"value": "middle"},
           "fill": {"value": "#17365D"}
         }
       }
     }
-  ],
-  "config": {
-    "text": {
-      "font": "Segoe UI"
-    }
-  }
+  ]
 }

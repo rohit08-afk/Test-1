@@ -1,14 +1,7 @@
-= Table.AddColumn(Source, "Invited Status", each
-    if [Invitation Status] <> null
-       and Text.Lower(Text.Trim(Text.From([Invitation Status]))) = "invited"
-    then 1
-    else 0,
-    Int64.Type)
+Sharing the updated RO Attendance and Completion view.
 
-
-    = Table.AddColumn(#"Added Custom", "Attendance Status", each
-    if [Attendance] <> null
-       and Text.Lower(Text.Trim(Text.From([Attendance]))) = "attended"
-    then 1
-    else 0,
-    Int64.Type)
+- Sessions covered: POs & PO Conversion (13 & 27 Oct), Payables & Invoicing (12, 22 & 26 Oct), and Fieldglass Services SES (20 Oct 2026).
+- Total ROs: Unique ROs are counted within each Category Family, avoiding duplication across sessions.
+- Attendance: An RO is counted as attended if they attend at least one session, including cases where they were not originally invited.
+- Overall Completion: Four onboarding topics contribute 25% each. Attending at least one session within a topic counts towards completion.
+- Dashboard Update: Attendance counts and completion percentages now reflect the refreshed session data across Category Families.

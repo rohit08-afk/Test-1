@@ -1,12 +1,10 @@
-RO Drillthrough Metrics =
-DATATABLE(
-    "Metric", STRING,
-    "Sort Order", INTEGER,
-    {
-        {"Total ROs", 1},
-        {"RO Invited", 2},
-        {"Attended", 3},
-        {"Not Attended", 4},
-        {"Remaining %", 5}
-    }
+RO Drillthrough Value =
+SWITCH(
+    SELECTEDVALUE('RO Drillthrough Metrics'[Metric]),
+    "Total ROs", [Total ROs],
+    "RO Invited", [RO Invited],
+    "Attended", [RO Attended],
+    "Not Attended", [RO Not Attended],
+    "Remaining %", DIVIDE([RO Not Attended], [Total ROs], 0),
+    BLANK()
 )

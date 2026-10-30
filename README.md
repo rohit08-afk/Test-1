@@ -1,47 +1,38 @@
-RO Topic Session Summary =
-VAR CurrentRO =
-    SELECTEDVALUE('GL1 RO Attendance Mapping'[RO])
-VAR CurrentTopic =
-    SELECTEDVALUE('RO Topics'[Topic])
-VAR InvitedCount =
-    CALCULATE(
-        DISTINCTCOUNT('GL1 RO Session Attendance unique'[Session Date]),
-        'GL1 RO Session Attendance unique'[Invited] = 1,
-        TREATAS(
-            {CurrentRO},
-            'GL1 RO Session Attendance unique'[RO]
-        ),
-        TREATAS(
-            {CurrentTopic},
-            'GL1 RO Session Attendance unique'[Topic]
-        )
-    )
-VAR AttendedCount =
-    CALCULATE(
-        DISTINCTCOUNT('GL1 RO Session Attendance unique'[Session Date]),
-        'GL1 RO Session Attendance unique'[Attended] = 1,
-        TREATAS(
-            {CurrentRO},
-            'GL1 RO Session Attendance unique'[RO]
-        ),
-        TREATAS(
-            {CurrentTopic},
-            'GL1 RO Session Attendance unique'[Topic]
-        )
-    )
-RETURN
-    FORMAT(COALESCE(InvitedCount, 0), "0")
-        & " Invited | "
-        & FORMAT(COALESCE(AttendedCount, 0), "0")
-        & " Attended"
-
-
-
-RO Topics =
-DISTINCT(
-    SELECTCOLUMNS(
-        'GL1 RO Session Attendance unique',
-        "Topic", 'GL1 RO Session Attendance unique'[Topic]
-    )
+RO Session Invited Display =
+IF(
+    MAX('GL1 RO Session Attendance unique'[Invited]) = 1,
+    "Yes",
+    "No"
 )
-        
+
+
+RO Session Attended Display =
+IF(
+    MAX('GL1 RO Session Attendance unique'[Attended]) = 1,
+    "Yes",
+    "No"
+)
+
+
+
+RO Session Breakdown Filter =
+VAR CurrentRO =
+    SELECTEDVALUE('GL1 RO Session Attendance unique'[RO])
+
+VAR EligibleROs =
+    FILTER(
+        VALUES('GL1 RO Attendance Mapping'[RO]),
+        CALCULATE([RO Drillthrough Row Filter]) = 1
+    )
+
+RETURN
+    IF(
+        NOT ISBLANK(CurrentRO)
+            && CONTAINS(
+                EligibleROs,
+                'GL1 RO Attendance Mapping'[RO],
+                CurrentRO
+            ),
+        1,
+        0
+    )

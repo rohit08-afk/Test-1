@@ -1,5 +1,5 @@
 RO Session Completion Contribution =
-VAR HasAttended =
+VAR Contribution =
     CALCULATE(
         MAX('GL1 RO Session Attendance unique'[Attended]),
         ALLEXCEPT(
@@ -9,4 +9,12 @@ VAR HasAttended =
         )
     )
 RETURN
-    IF(HasAttended = 1, 0.25, 0)
+IF(
+    ISINSCOPE('GL1 RO Session Attendance unique'[Session Date]),
+    BLANK(),
+    IF(
+        ISINSCOPE('GL1 RO Session Attendance unique'[Topic]),
+        IF(Contribution = 1, 0.25, 0),
+        BLANK()
+    )
+)

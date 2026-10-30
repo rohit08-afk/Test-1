@@ -1,7 +1,24 @@
-Sharing the updated RO Attendance and Completion view.
+RETURN
+COALESCE(
+    CALCULATE(
+        DISTINCTCOUNT('Supplier Integration Register'[Index]),
+        REMOVEFILTERS(
+            'Supplier Integration Register'[Comms Progress]
+        ),
+        TREATAS(
+            {selectedstatus},
+            'Supplier Integration Register'[Comms Progress]
+        )
+    ),
+    0
+)
 
-- Sessions covered: POs & PO Conversion (13 & 27 Oct), Payables & Invoicing (12, 22 & 26 Oct), and Fieldglass Services SES (20 Oct 2026).
-- Total ROs: Unique ROs are counted within each Category Family, avoiding duplication across sessions.
-- Attendance: An RO is counted as attended if they attend at least one session, including cases where they were not originally invited.
-- Overall Completion: Four onboarding topics contribute 25% each. Attending at least one session within a topic counts towards completion.
-- Dashboard Update: Attendance counts and completion percentages now reflect the refreshed session data across Category Families.
+
+
+Comms Progress Count Label =
+FORMAT(
+    COALESCE([Comms Progress Visual Count], 0),
+    "#,0"
+)
+& " / " &
+FORMAT([Suppliers in Scope], "#,0")

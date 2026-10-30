@@ -1,11 +1,12 @@
-GL2 Excluded from Comms =
-CALCULATE(
-    DISTINCTCOUNT(
-        'GL2 - Supplier Integration Register'[Vendor Number]
-    ),
-    REMOVEFILTERS(
-        'GL2 - Supplier Integration Register'[Comms Progress]
-    ),
-    'GL2 - Supplier Integration Register'[Comms Progress]
-        = "7-Exclude from Comms"
+RO Drillthrough Metrics =
+DATATABLE(
+    "Metric", STRING,
+    "Sort Order", INTEGER,
+    {
+        {"Total ROs", 1},
+        {"RO Invited", 2},
+        {"Attended", 3},
+        {"Not Attended", 4},
+        {"Remaining %", 5}
+    }
 )

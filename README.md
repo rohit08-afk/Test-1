@@ -1,38 +1,58 @@
-RO Session Invited Display =
-IF(
-    MAX('GL1 RO Session Attendance unique'[Invited]) = 1,
-    "Yes",
-    "No"
-)
-
-
-RO Session Attended Display =
-IF(
-    MAX('GL1 RO Session Attendance unique'[Attended]) = 1,
-    "Yes",
-    "No"
-)
-
-
-
-RO Session Breakdown Filter =
+RO Topic Completion Contribution =
 VAR CurrentRO =
-    SELECTEDVALUE('GL1 RO Session Attendance unique'[RO])
+    SELECTEDVALUE('GL1 RO Attendance Mapping'[RO])
 
-VAR EligibleROs =
-    FILTER(
-        VALUES('GL1 RO Attendance Mapping'[RO]),
-        CALCULATE([RO Drillthrough Row Filter]) = 1
+VAR CurrentTopic =
+    SELECTEDVALUE('RO Topics'[Topic])
+
+VAR HasAttended =
+    CALCULATE(
+        COUNTROWS('GL1 RO Session Attendance unique'),
+        'GL1 RO Session Attendance unique'[Attended] = 1,
+        TREATAS(
+            {CurrentRO},
+            'GL1 RO Session Attendance unique'[RO]
+        ),
+        TREATAS(
+            {CurrentTopic},
+            'GL1 RO Session Attendance unique'[Topic]
+        )
     )
 
 RETURN
-    IF(
-        NOT ISBLANK(CurrentRO)
-            && CONTAINS(
-                EligibleROs,
-                'GL1 RO Attendance Mapping'[RO],
-                CurrentRO
-            ),
-        1,
-        0
+IF(
+    NOT ISBLANK(CurrentRO)
+        && NOT ISBLANK(CurrentTopic),
+    IF(HasAttended > 0, 0.25, 0),
+    BLANK()
+)
+
+
+
+RO Session Completion Contribution =
+VAR CurrentRO =
+    SELECTEDVALUE('GL1 RO Session Attendance unique'[RO])
+
+VAR CurrentTopic =
+    SELECTEDVALUE('GL1 RO Session Attendance unique'[Topic])
+
+VAR HasAttended =
+    CALCULATE(
+        COUNTROWS('GL1 RO Session Attendance unique'),
+        REMOVEFILTERS('GL1 RO Session Attendance unique'[Session Date]),
+        'GL1 RO Session Attendance unique'[Attended] = 1,
+        'GL1 RO Session Attendance unique'[RO] = CurrentRO,
+        'GL1 RO Session Attendance unique'[Topic] = CurrentTopic
     )
+
+RETURN
+IF(
+    ISINSCOPE('GL1 RO Session Attendance unique'[Topic])
+        && NOT ISINSCOPE('GL1 RO Session Attendance unique'[Session Date])
+        && HasAttended > 0,
+    0.25,
+    BLANK()
+)
+
+
+

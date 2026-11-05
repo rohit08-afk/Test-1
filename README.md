@@ -1,9 +1,17 @@
-RO Session Drillthrough Value =
+RO Session Detail Filter =
+VAR SelectedMetric =
+    SELECTEDVALUE('RO Session Metrics'[Metric])
+VAR IsInvited =
+    [Session RO Invited] > 0
+VAR IsAttended =
+    [Session RO Attended] > 0
+VAR IsNotAttended =
+    [Session RO Not Attended] > 0
+RETURN
 SWITCH(
-    SELECTEDVALUE('RO Session Metrics'[Metric]),
-    "Invited", [Session RO Invited],
-    "Attended", [Session RO Attended],
-    "Not Attended", [Session RO Not Attended],
-    "Change vs Previous", 999,
-    BLANK()
+    SelectedMetric,
+    "Invited", IF(IsInvited, 1, 0),
+    "Attended", IF(IsAttended, 1, 0),
+    "Not Attended", IF(IsNotAttended, 1, 0),
+    1
 )

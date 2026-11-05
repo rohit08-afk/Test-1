@@ -1,50 +1,33 @@
-
--- 1. HIGH PRIORITY NOT ATTENDED
-
-Supplier Session High Not Attended =
-CALCULATE(
-    [Supplier Session Not Attended],
-    'GL1 Webinar Measures'[Comms Priority] = "High"
+Supplier Session Metrics =
+DATATABLE(
+    "Metric", STRING,
+    "Sort Order", INTEGER,
+    {
+        {"Suppliers in Scope", 1},
+        {"Invited", 2},
+        {"Attended", 3},
+        {"Not Attended", 4},
+        {"Attendance Rate", 5},
+        {"High Not Attended", 6},
+        {"Medium Not Attended", 7},
+        {"Weekly Change", 8}
+    }
 )
 
 
--- 2. MEDIUM PRIORITY NOT ATTENDED
-
-Supplier Session Medium Not Attended =
-CALCULATE(
-    [Supplier Session Not Attended],
-    'GL1 Webinar Measures'[Comms Priority] = "Medium"
-)
-
-
--- 3. WEEKLY CHANGE (COUNT)
-
-Supplier Session Weekly Change Count =
-VAR CurrentDate =
-    SELECTEDVALUE('GL1 Webinar Measures'[Webinar Date])
-
-VAR PreviousDate =
-    CALCULATE(
-        MAX('GL1 Webinar Measures'[Webinar Date]),
-        REMOVEFILTERS('GL1 Webinar Measures'[Webinar Date]),
-        'GL1 Webinar Measures'[Webinar Date] < CurrentDate
-    )
-
-VAR PreviousAttended =
-    CALCULATE(
-        [Supplier Session Attended],
-        REMOVEFILTERS('GL1 Webinar Measures'[Webinar Date]),
-        'GL1 Webinar Measures'[Webinar Date] = PreviousDate
-    )
-
-RETURN
-IF(
-    ISINSCOPE('GL1 Webinar Measures'[Webinar Date]),
-    IF(
-        ISBLANK(PreviousDate),
-        0,
-        COALESCE([Supplier Session Attended], 0)
-            - COALESCE(PreviousAttended, 0)
-    ),
+Supplier Session Drillthrough Value =
+SWITCH(
+    SELECTEDVALUE('Supplier Session Metrics'[Metric]),
+    "Suppliers in Scope", [Suppliers in-scope],
+    "Invited", [Supplier Session Invited],
+    "Attended", [Supplier Session Attended],
+    "Not Attended", [Supplier Session Not Attended],
+    "Attendance Rate", [Webinar Attendance Rate],
+    "High Not Attended", [Supplier Session High Not Attended],
+    "Medium Not Attended", [Supplier Session Medium Not Attended],
+    "Weekly Change", [Supplier Session Weekly Change Count],
     BLANK()
 )
+
+
+

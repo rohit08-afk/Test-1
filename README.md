@@ -3,8 +3,8 @@
 
 Session RO Invited =
 CALCULATE(
-    DISTINCTCOUNT('GL1 RO Attendance_Working'[RO]),
-    'GL1 RO Attendance_Working'[Invitation Status] = "Invited"
+    DISTINCTCOUNT('GL1 RO Attendance Mapping'[RO]),
+    'GL1 RO Attendance Mapping'[Invitation Status] = "Invited"
 )
 
 
@@ -12,8 +12,8 @@ CALCULATE(
 
 Session RO Attended =
 CALCULATE(
-    DISTINCTCOUNT('GL1 RO Attendance_Working'[RO]),
-    'GL1 RO Attendance_Working'[Attendance] = "Attended"
+    DISTINCTCOUNT('GL1 RO Attendance Mapping'[RO]),
+    'GL1 RO Attendance Mapping'[Attendance] = "Attended"
 )
 
 
@@ -22,13 +22,13 @@ CALCULATE(
 Session RO Not Attended =
 VAR InvitedROs =
     CALCULATETABLE(
-        VALUES('GL1 RO Attendance_Working'[RO]),
-        'GL1 RO Attendance_Working'[Invitation Status] = "Invited"
+        VALUES('GL1 RO Attendance Mapping'[RO]),
+        'GL1 RO Attendance Mapping'[Invitation Status] = "Invited"
     )
 VAR AttendedROs =
     CALCULATETABLE(
-        VALUES('GL1 RO Attendance_Working'[RO]),
-        'GL1 RO Attendance_Working'[Attendance] = "Attended"
+        VALUES('GL1 RO Attendance Mapping'[RO]),
+        'GL1 RO Attendance Mapping'[Attendance] = "Attended"
     )
 RETURN
     COUNTROWS(
@@ -40,20 +40,20 @@ RETURN
 
 Session Attendance Change =
 VAR CurrentDate =
-    SELECTEDVALUE('GL1 RO Attendance_Working'[Session Date])
+    SELECTEDVALUE('GL1 RO Attendance Mapping'[Session Date])
 
 VAR PreviousDate =
     CALCULATE(
-        MAX('GL1 RO Attendance_Working'[Session Date]),
-        REMOVEFILTERS('GL1 RO Attendance_Working'[Session Date]),
-        'GL1 RO Attendance_Working'[Session Date] < CurrentDate
+        MAX('GL1 RO Attendance Mapping'[Session Date]),
+        REMOVEFILTERS('GL1 RO Attendance Mapping'[Session Date]),
+        'GL1 RO Attendance Mapping'[Session Date] < CurrentDate
     )
 
 VAR PreviousAttendance =
     CALCULATE(
         [Session RO Attended],
-        REMOVEFILTERS('GL1 RO Attendance_Working'[Session Date]),
-        'GL1 RO Attendance_Working'[Session Date] = PreviousDate
+        REMOVEFILTERS('GL1 RO Attendance Mapping'[Session Date]),
+        'GL1 RO Attendance Mapping'[Session Date] = PreviousDate
     )
 
 RETURN

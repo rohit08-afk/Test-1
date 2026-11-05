@@ -3,48 +3,31 @@ Supplier Session Detail Filter =
 VAR SelectedMetric =
     SELECTEDVALUE('Supplier Session Metrics'[Metric])
 
-VAR IsInvited =
-    CALCULATE(
-        COUNTROWS('GL1 Webinar Measures'),
-        'GL1 Webinar Measures'[Invited Status] = "Invited"
-    ) > 0
+VAR Invited =
+    [Supplier Session Invited]
 
-VAR IsAttended =
-    CALCULATE(
-        COUNTROWS('GL1 Webinar Measures'),
-        'GL1 Webinar Measures'[Invited Status] = "Invited",
-        'GL1 Webinar Measures'[Attendance Status] = "Attended"
-    ) > 0
+VAR Attended =
+    [Supplier Session Attended]
 
-VAR IsHigh =
-    CALCULATE(
-        COUNTROWS('GL1 Webinar Measures'),
-        'GL1 Webinar Measures'[Invited Status] = "Invited",
-        'GL1 Webinar Measures'[Comms Priority] = "High"
-    ) > 0
+VAR NotAttended =
+    [Supplier Session Not Attended]
 
-VAR IsMedium =
-    CALCULATE(
-        COUNTROWS('GL1 Webinar Measures'),
-        'GL1 Webinar Measures'[Invited Status] = "Invited",
-        'GL1 Webinar Measures'[Comms Priority] = "Medium"
-    ) > 0
+VAR HighNotAttended =
+    [Supplier Session High Not Attended]
+
+VAR MediumNotAttended =
+    [Supplier Session Medium Not Attended]
 
 RETURN
 SWITCH(
-    TRUE(),
-    SelectedMetric = "Invited" && IsInvited, 1,
-    SelectedMetric = "Attended" && IsAttended, 1,
-    SelectedMetric = "Not Attended"
-        && IsInvited && NOT IsAttended, 1,
-    SelectedMetric = "High Not Attended"
-        && IsHigh && NOT IsAttended, 1,
-    SelectedMetric = "Medium Not Attended"
-        && IsMedium && NOT IsAttended, 1,
-    SelectedMetric IN {
-        "Suppliers in Scope",
-        "Attendance Rate",
-        "Weekly Change"
-    }, 1,
+    SelectedMetric,
+    "Invited", IF(Invited > 0, 1, 0),
+    "Attended", IF(Attended > 0, 1, 0),
+    "Not Attended", IF(NotAttended > 0, 1, 0),
+    "High Not Attended", IF(HighNotAttended > 0, 1, 0),
+    "Medium Not Attended", IF(MediumNotAttended > 0, 1, 0),
+    "Suppliers in Scope", 1,
+    "Attendance Rate", 1,
+    "Weekly Change", 1,
     0
 )

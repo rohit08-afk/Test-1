@@ -1,33 +1,40 @@
+GL1 Weekly Attendance Growth PP =
+VAR LatestDate =
+    CALCULATE(
+        MAX('GL1 Webinar Measures'[Webinar Date]),
+        REMOVEFILTERS('GL1 Webinar Measures'[Webinar Date])
+    )
 
-Supplier Session Detail Filter =
-VAR SelectedMetric =
-    SELECTEDVALUE('Supplier Session Metrics'[Metric])
+VAR CurrentAttended =
+    CALCULATE(
+        DISTINCTCOUNT('GL1 Webinar Measures'[Supplier Name]),
+        'GL1 Webinar Measures'[Attendance Status] = "Attended",
+        REMOVEFILTERS('GL1 Webinar Measures'[Webinar Date]),
+        'GL1 Webinar Measures'[Webinar Date] <= LatestDate
+    )
 
-VAR Invited =
-    [Supplier Session Invited]
+VAR PreviousAttended =
+    CALCULATE(
+        DISTINCTCOUNT('GL1 Webinar Measures'[Supplier Name]),
+        'GL1 Webinar Measures'[Attendance Status] = "Attended",
+        REMOVEFILTERS('GL1 Webinar Measures'[Webinar Date]),
+        'GL1 Webinar Measures'[Webinar Date] <= LatestDate - 7
+    )
 
-VAR Attended =
-    [Supplier Session Attended]
-
-VAR NotAttended =
-    [Supplier Session Not Attended]
-
-VAR HighNotAttended =
-    [Supplier Session High Not Attended]
-
-VAR MediumNotAttended =
-    [Supplier Session Medium Not Attended]
+VAR TotalSuppliers =
+    [Suppliers in-scope]
 
 RETURN
-SWITCH(
-    SelectedMetric,
-    "Invited", IF(Invited > 0, 1, 0),
-    "Attended", IF(Attended > 0, 1, 0),
-    "Not Attended", IF(NotAttended > 0, 1, 0),
-    "High Not Attended", IF(HighNotAttended > 0, 1, 0),
-    "Medium Not Attended", IF(MediumNotAttended > 0, 1, 0),
-    "Suppliers in Scope", 1,
-    "Attendance Rate", 1,
-    "Weekly Change", 1,
-    0
-)
+    DIVIDE(
+        CurrentAttended - PreviousAttended,
+        TotalSuppliers,
+        0
+    ) * 100
+
+
+
+    GL1 Weekly Attendance Growth Display =
+FORMAT(
+    [GL1 Weekly Attendance Growth PP],
+    "+0.0;-0.0;0.0"
+) & " pp"

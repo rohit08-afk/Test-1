@@ -1,15 +1,32 @@
-Selected RO Topic =
-SELECTEDVALUE(
-    'GL1 RO Attendance Mapping'[Topic],
-    "All Topics"
-)
-
-Selected RO Session =
-VAR SessionDate =
-    SELECTEDVALUE('GL1 RO Attendance Mapping'[Session Date])
+Supplier Session Attended =
+VAR InvitedSuppliers =
+    CALCULATETABLE(
+        VALUES('GL1 Webinar Measures'[Supplier Name]),
+        'GL1 Webinar Measures'[Invited Status] = "Invited"
+    )
+VAR AttendedSuppliers =
+    CALCULATETABLE(
+        VALUES('GL1 Webinar Measures'[Supplier Name]),
+        'GL1 Webinar Measures'[Attendance Status] = "Attended"
+    )
 RETURN
-    IF(
-        NOT ISBLANK(SessionDate),
-        FORMAT(SessionDate, "dd MMM yyyy"),
-        "All Sessions"
+    COUNTROWS(
+        INTERSECT(InvitedSuppliers, AttendedSuppliers)
+    )
+
+
+    Supplier Session Not Attended =
+VAR InvitedSuppliers =
+    CALCULATETABLE(
+        VALUES('GL1 Webinar Measures'[Supplier Name]),
+        'GL1 Webinar Measures'[Invited Status] = "Invited"
+    )
+VAR AttendedSuppliers =
+    CALCULATETABLE(
+        VALUES('GL1 Webinar Measures'[Supplier Name]),
+        'GL1 Webinar Measures'[Attendance Status] = "Attended"
+    )
+RETURN
+    COUNTROWS(
+        EXCEPT(InvitedSuppliers, AttendedSuppliers)
     )

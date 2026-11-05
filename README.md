@@ -1,8 +1,14 @@
-Vendor Row Count =
-CALCULATE(
-    COUNTROWS('GL2 - Supplier Integration Register'),
-    ALLEXCEPT(
-        'GL2 - Supplier Integration Register',
-        'GL2 - Supplier Integration Register'[Vendor_num]
-    )
+RO Session Metrics =
+DATATABLE(
+    "Metric", STRING,
+    "Sort Order", INTEGER,
+    {
+        {"Total ROs", 1},
+        {"Invited", 2},
+        {"Attended", 3},
+        {"Not Attended", 4},
+        {"Change vs Previous Session", 5}
+    }
 )
+
+

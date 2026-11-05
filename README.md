@@ -1,33 +1,58 @@
-Supplier Session Metrics =
-DATATABLE(
-    "Metric", STRING,
-    "Sort Order", INTEGER,
-    {
-        {"Suppliers in Scope", 1},
-        {"Invited", 2},
-        {"Attended", 3},
-        {"Not Attended", 4},
-        {"Attendance Rate", 5},
-        {"High Not Attended", 6},
-        {"Medium Not Attended", 7},
-        {"Weekly Change", 8}
-    }
-)
+Supplier Session Detail Filter =
+VAR MetricSelected =
+    SELECTEDVALUE('Supplier Session Metrics'[Metric])
 
+VAR IsInvited =
+    CALCULATE(
+        COUNTROWS('GL1 Webinar Measures'),
+        'GL1 Webinar Measures'[Invited Status] = "Invited"
+    ) > 0
 
-Supplier Session Drillthrough Value =
+VAR IsAttended =
+    CALCULATE(
+        COUNTROWS('GL1 Webinar Measures'),
+        'GL1 Webinar Measures'[Invited Status] = "Invited",
+        'GL1 Webinar Measures'[Attendance Status] = "Attended"
+    ) > 0
+
+VAR Priority =
+    SELECTEDVALUE('GL1 Webinar Measures'[Comms Priority])
+
+RETURN
 SWITCH(
-    SELECTEDVALUE('Supplier Session Metrics'[Metric]),
-    "Suppliers in Scope", [Suppliers in-scope],
-    "Invited", [Supplier Session Invited],
-    "Attended", [Supplier Session Attended],
-    "Not Attended", [Supplier Session Not Attended],
-    "Attendance Rate", [Webinar Attendance Rate],
-    "High Not Attended", [Supplier Session High Not Attended],
-    "Medium Not Attended", [Supplier Session Medium Not Attended],
-    "Weekly Change", [Supplier Session Weekly Change Count],
-    BLANK()
+    TRUE(),
+    MetricSelected = "Invited" && IsInvited, 1,
+    MetricSelected = "Attended" && IsAttended, 1,
+    MetricSelected = "Not Attended"
+        && IsInvited && NOT IsAttended, 1,
+    MetricSelected = "High Not Attended"
+        && IsInvited && NOT IsAttended && Priority = "High", 1,
+    MetricSelected = "Medium Not Attended"
+        && IsInvited && NOT IsAttended && Priority = "Medium", 1,
+    MetricSelected IN {
+        "Suppliers in Scope",
+        "Attendance Rate",
+        "Weekly Change"
+    }, 1,
+    0
 )
 
+
+Selected Supplier Persona =
+SELECTEDVALUE(
+    'GL1 Webinar Measures'[Persona],
+    "All Personas"
+)
+
+
+Selected Supplier Webinar Date =
+VAR SelectedDate =
+    SELECTEDVALUE('GL1 Webinar Measures'[Webinar Date])
+RETURN
+IF(
+    ISBLANK(SelectedDate),
+    "All Sessions",
+    FORMAT(SelectedDate, "dd MMM yyyy")
+)
 
 

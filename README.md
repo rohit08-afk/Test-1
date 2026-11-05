@@ -1,17 +1,15 @@
-RO Session Detail Filter =
-VAR SelectedMetric =
-    SELECTEDVALUE('RO Session Metrics'[Metric])
-VAR IsInvited =
-    [Session RO Invited] > 0
-VAR IsAttended =
-    [Session RO Attended] > 0
-VAR IsNotAttended =
-    [Session RO Not Attended] > 0
-RETURN
-SWITCH(
-    SelectedMetric,
-    "Invited", IF(IsInvited, 1, 0),
-    "Attended", IF(IsAttended, 1, 0),
-    "Not Attended", IF(IsNotAttended, 1, 0),
-    1
+Selected RO Topic =
+SELECTEDVALUE(
+    'GL1 RO Attendance Mapping'[Topic],
+    "All Topics"
 )
+
+Selected RO Session =
+VAR SessionDate =
+    SELECTEDVALUE('GL1 RO Attendance Mapping'[Session Date])
+RETURN
+    IF(
+        NOT ISBLANK(SessionDate),
+        FORMAT(SessionDate, "dd MMM yyyy"),
+        "All Sessions"
+    )

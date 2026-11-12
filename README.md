@@ -2,8 +2,24 @@ Supplier Drillthrough Row Filter =
 VAR SelectedMetric =
     SELECTEDVALUE('Supplier Drillthrough Metrics'[Metric])
 
-VAR CurrentPriority =
-    SELECTEDVALUE('GL1 Webinar Measures'[Comms Priority])
+VAR CurrentSupplier =
+    SELECTEDVALUE('GL1 Webinar Measures'[Supplier Name])
+
+VAR IsHighTarget =
+    CALCULATE(
+        COUNTROWS('Supplier Integration Register'),
+        REMOVEFILTERS('Supplier Integration Register'),
+        'Supplier Integration Register'[Name] = CurrentSupplier,
+        'Supplier Integration Register'[Comms Priority] = "High"
+    ) > 0
+
+VAR IsMediumTarget =
+    CALCULATE(
+        COUNTROWS('Supplier Integration Register'),
+        REMOVEFILTERS('Supplier Integration Register'),
+        'Supplier Integration Register'[Name] = CurrentSupplier,
+        'Supplier Integration Register'[Comms Priority] = "Medium"
+    ) > 0
 
 VAR HasAttended =
     [GL1 Webinar Attended] > 0
@@ -13,29 +29,20 @@ SWITCH(
     TRUE(),
 
     SelectedMetric = "Suppliers in scope",
-        IF(
-            CurrentPriority IN {"High", "Medium"},
-            1, 0
-        ),
+        IF(IsHighTarget || IsMediumTarget, 1, 0),
 
     SelectedMetric = "Webinar Attended",
         IF(HasAttended, 1, 0),
 
     SelectedMetric = "High Priority Not Attended",
-        IF(
-            CurrentPriority = "High" && NOT HasAttended,
-            1, 0
-        ),
+        IF(IsHighTarget && NOT HasAttended, 1, 0),
 
     SelectedMetric = "Medium Priority Not Attended",
-        IF(
-            CurrentPriority = "Medium" && NOT HasAttended,
-            1, 0
-        ),
+        IF(IsMediumTarget && NOT HasAttended, 1, 0),
 
     SelectedMetric = "Remaining %",
         IF(
-            CurrentPriority IN {"High", "Medium"}
+            (IsHighTarget || IsMediumTarget)
                 && NOT HasAttended,
             1, 0
         ),

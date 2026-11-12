@@ -12,14 +12,33 @@ RETURN
 SWITCH(
     TRUE(),
 
+    SelectedMetric = "Suppliers in scope",
+        IF(
+            CurrentPriority IN {"High", "Medium"},
+            1, 0
+        ),
+
     SelectedMetric = "Webinar Attended",
         IF(HasAttended, 1, 0),
 
     SelectedMetric = "High Priority Not Attended",
-        IF(CurrentPriority = "High" && NOT HasAttended, 1, 0),
+        IF(
+            CurrentPriority = "High" && NOT HasAttended,
+            1, 0
+        ),
 
     SelectedMetric = "Medium Priority Not Attended",
-        IF(CurrentPriority = "Medium" && NOT HasAttended, 1, 0),
+        IF(
+            CurrentPriority = "Medium" && NOT HasAttended,
+            1, 0
+        ),
 
-    BLANK()
+    SelectedMetric = "Remaining %",
+        IF(
+            CurrentPriority IN {"High", "Medium"}
+                && NOT HasAttended,
+            1, 0
+        ),
+
+    0
 )

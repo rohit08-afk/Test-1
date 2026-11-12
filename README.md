@@ -1,5 +1,7 @@
-SWITCH(
-    SELECTEDVALUE('Supplier Drillthrough Metrics'[Metric]),
-    "Remaining %", "0%",
-    "#,0"
+RO Topics =
+DISTINCT(
+    SELECTCOLUMNS(
+        'GL1 RO Attendance Mapping',
+        "Topic", 'GL1 RO Attendance Mapping'[Topic]
+    )
 )

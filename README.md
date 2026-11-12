@@ -2,11 +2,11 @@ Supplier Drillthrough Row Filter =
 VAR SelectedMetric =
     SELECTEDVALUE('Supplier Drillthrough Metrics'[Metric])
 
-VAR Priority =
+VAR CurrentPriority =
     SELECTEDVALUE('GL1 Webinar Measures'[Comms Priority])
 
 VAR HasAttended =
-    COALESCE([Calc Webinar Attended], 0) > 0
+    [GL1 Webinar Attended] > 0
 
 RETURN
 SWITCH(
@@ -16,10 +16,10 @@ SWITCH(
         IF(HasAttended, 1, 0),
 
     SelectedMetric = "High Priority Not Attended",
-        IF(Priority = "High" && NOT HasAttended, 1, 0),
+        IF(CurrentPriority = "High" && NOT HasAttended, 1, 0),
 
     SelectedMetric = "Medium Priority Not Attended",
-        IF(Priority = "Medium" && NOT HasAttended, 1, 0),
+        IF(CurrentPriority = "Medium" && NOT HasAttended, 1, 0),
 
     BLANK()
 )

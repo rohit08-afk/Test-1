@@ -1,2 +1,9 @@
-ISNUMBER(SEARCH("Fieldglass Services SES",id)),'Fieldglass Services SES'!$A$1:$AZ$1000,
-ISNUMBER(SEARCH("Professional Services SOW Identity",id)),'Professional Services SOW Ident'!$A$1:$AZ$1000)
+Test =
+CALCULATE(
+    DISTINCTCOUNT('GL1 RO Attendance Mapping'[RO]),
+    'GL1 RO Attendance Mapping'[Attendance] = "Attended",
+    TREATAS(
+        VALUES('RO Topics'[Topic]),
+        'GL1 RO Attendance Mapping'[Topic]
+    )
+)

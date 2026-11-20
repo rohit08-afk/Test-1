@@ -1,9 +1,8 @@
 = Table.ReplaceErrorValues(
-    #"Promoted Headers",
+    #"Renamed Columns",
     {
-        {"ExxonMobil Relationship Owner (RO)", null},
-        {"Invited", "Not Invited"},
-        {"Attended", "Not Attended"},
+        {"Invitation Status", "Not Invited"},
+        {"Attendance", "Not Attended"},
         {"Duration", "N/A"}
     }
 )

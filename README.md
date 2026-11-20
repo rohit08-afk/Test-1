@@ -1,7 +1,9 @@
-
-Fix =
-CALCULATE(
-    DISTINCTCOUNT('GL1 RO Attendance Mapping'[RO]),
-    'GL1 RO Attendance Mapping'[Attendance] = "Attended",
-    REMOVEFILTERS('RO Topics')
+= Table.ReplaceErrorValues(
+    #"Promoted Headers",
+    {
+        {"ExxonMobil Relationship Owner (RO)", null},
+        {"Invited", "Not Invited"},
+        {"Attended", "Not Attended"},
+        {"Duration", "N/A"}
+    }
 )
